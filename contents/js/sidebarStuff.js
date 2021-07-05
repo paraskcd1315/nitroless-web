@@ -92,6 +92,12 @@ var sidebarStuff = {
                         navBar.classList.add("hide");
                         location.href = "https://github.com/Nitroless/Electron/releases";
                         break;
+                        
+                    case "androidApp":
+                        searchbar.classList.add("hide");
+                        navBar.classList.add("hide");
+                        location.href = "https://github.com/Nitroless/nitroless-android/releases";
+                        break;
 
                 }
             }
