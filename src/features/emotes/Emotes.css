@@ -1,5 +1,5 @@
 .urlContent {
-    --text-color: #fff4;
+    --border-color: rgba(73, 76, 83, 0.516);
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 0.5rem;
@@ -10,14 +10,14 @@
 
 .emotesHeader, .urlDetails {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     background-color: var(--background-tertiary-color);
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: 1rem;
     box-shadow: var(--boxShadow);
-    border: 1px solid var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .emotesHeader {
@@ -50,11 +50,11 @@
     padding: 1rem;
     border-radius: 1rem;
     box-shadow: var(--boxShadow);
-    border: 1px solid var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .emotesContainer{
-    margin-top: -80px;
+    margin-top: -9rem;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 1rem;
@@ -64,7 +64,7 @@
     padding: 1rem;
     border-radius: 1rem;
     box-shadow: var(--boxShadow);
-    border: 1px solid var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .emotesContainer .emoteContainer {
@@ -127,12 +127,115 @@
         box-shadow: var(--boxShadow);
     }
 
+    .hamburgerMenu {
+        width: 60px;
+        height: 60px;
+        position: relative;
+    }
+
+    .hamburgerMenu .icon-left {
+        transition-duration: 0.5s;
+        position: absolute;
+        height: 4px;
+        width: 15px;
+        top: 30px;
+        background-color: #fff;
+    }
+
+    .hamburgerMenu .icon-left:before {
+        transition-duration: 0.5s;
+        position: absolute;
+        width: 15px;
+        height: 4px;
+        background-color: #fff;
+        content: "";
+        top: -10px;
+    }
+
+    .hamburgerMenu .icon-left:after {
+        transition-duration: 0.5s;
+        position: absolute;
+        width: 15px;
+        height: 4px;
+        background-color: #fff;
+        content: "";
+        top: 10px;
+    }
+
+    .hamburgerMenu .icon-left:hover {
+        cursor: pointer;
+    }
+
+    .hamburgerMenu .icon-right {
+        transition-duration: 0.5s;
+        position: absolute;
+        height: 4px;
+        width: 15px;
+        top: 30px;
+        background-color: #fff;
+        left: 15px;
+    }
+
+    .hamburgerMenu .icon-right:before {
+        transition-duration: 0.5s;
+        position: absolute;
+        width: 15px;
+        height: 4px;
+        background-color: #fff;
+        content: "";
+        top: -10px;
+    }
+
+    .hamburgerMenu .icon-right:after {
+        transition-duration: 0.5s;
+        position: absolute;
+        width: 15px;
+        height: 4px;
+        background-color: #fff;
+        content: "";
+        top: 10px;
+    }
+
+    .hamburgerMenu.open .icon-left {
+        transition-duration: 0.5s;
+        background: transparent;
+    }
+
+    .hamburgerMenu.open .icon-left:before {
+        transform: rotateZ(45deg) scaleX(1.4) translate(2px, 2px);
+    }
+
+    .hamburgerMenu.open .icon-left:after {
+        transform: rotateZ(-45deg) scaleX(1.4) translate(2px, -2px);
+    }
+
+    .hamburgerMenu.open .icon-right {
+        transition-duration: 0.5s;
+        background: transparent;
+    }
+
+    .hamburgerMenu.open .icon-right:before {
+        transform: rotateZ(-45deg) scaleX(1.4) translate(-2px, 2px);
+    }
+
+    .hamburgerMenu.open .icon-right:after {
+        transform: rotateZ(45deg) scaleX(1.4) translate(-2px, -2px);
+    }
+
+    .hamburgerMenu:hover {
+        cursor: pointer;
+    }
+
     .urlContent {
-        margin-top: 2rem;
+        margin-top: 8rem;
     }
 
     .emotesContainer {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .favouriteEmotes {
+        margin-bottom: 2rem;
     }
 }
 

@@ -60,11 +60,43 @@ const reposSlice = createSlice({
         removeRepository: (state, action) => {
             let lStorageRepos = JSON.parse(localStorage.getItem('repos'));
 
-            lStorageRepos = lStorageRepos.filter(repo => repo.url !== action.payload);
+            if(lStorageRepos.length > 0) {
+                lStorageRepos = lStorageRepos.filter(repo => repo.url !== action.payload);
+    
+                state.repoURLs = lStorageRepos;
+    
+                localStorage.setItem('repos', JSON.stringify(lStorageRepos));
+            } else return;
+        },
+        addEmoteToFavourites: (state, action) => {
+            const { url, emote } = action.payload;
+            let lStorageRepos = JSON.parse(localStorage.getItem('repos'));
 
-            state.repoURLs = lStorageRepos;
+            if(lStorageRepos.length > 0) {
+                let repo = lStorageRepos.filter(repo => repo.url === url)[0];
+                lStorageRepos = lStorageRepos.filter(repo => repo.url !== url); 
+                
+                if(Object.keys(repo).contains('favourites')) {
+                    repo.favourites.append(emote);
+                } else {
+                    repo.favourites = [emote];
+                }
 
-            localStorage.setItem('repos', JSON.stringify(lStorageRepos));
+                lStorageRepos.append(repo);
+
+                state.repoURLs = lStorageRepos;
+                localStorage.setItem('repos', JSON.stringify(lStorageRepos));
+            } else {
+                lStorageRepos = [ {
+                    active: false,
+                    url: url,
+                    data: {},
+                    favourites: [ emote ]
+                } ];
+
+                state.repoURLs = lStorageRepos;
+                localStorage.setItem('repos', JSON.stringify(lStorageRepos));
+            }
         }
     },
     extraReducers: (builder) => {

@@ -7,7 +7,7 @@ import './Repos.css';
 import logo from '../../assets/images/logo/index.png';
 import { selectedRepo } from '../emotes/emotesSlice';
 
-const Repos = () => {
+const Repos = ({ openSidebar }) => {
     const [ homeActive, setHomeActive ] = useState(true);
     const allRepos = useSelector((state) => state.repos.allRepos);
     const dispatch = useDispatch();
@@ -21,7 +21,7 @@ const Repos = () => {
     }, [dispatch]);
 
     return (
-    <div className='Repos'>
+    <div className={`Repos${openSidebar ? ' sidebarOpened' : ''}`}>
         <div className={`repo${homeActive ? ' active' : ''}`} onClick={(e) => {
                     e.preventDefault();
 

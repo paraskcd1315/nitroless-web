@@ -136,7 +136,10 @@
     .Repos {
         transform: translateX(-72px);
     }
-    .Repos.active {
+    .Repos.sidebarOpened {
         transform: unset;
+    }
+    .repo:first-child {
+        margin-top: 6rem;
     }
 }
