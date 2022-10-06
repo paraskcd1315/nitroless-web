@@ -1,0 +1,43 @@
+.App {
+  display: flex;
+}
+
+.mainContent {
+  margin-left: 72px;
+  padding: 1rem;
+}
+
+.btn {
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary-color);
+  border: none;
+  outline: none;
+  padding: 1rem;
+  border-radius: 2rem;
+  box-shadow: var(--boxShadow);
+  cursor: pointer;
+  transition: all 250ms ease;
+  margin-top: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.btn:hover {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 1rem;
+}
+
+.btn.danger {
+  color: var(--danger-color)
+}
+
+.btn.danger:hover {
+  background-color: var(--danger-color);
+  color: #fff;
+  border-radius: 1rem;
+}

@@ -1,0 +1,156 @@
+.Repos {
+    --text-color: #fff;
+    padding: 12px 0 0;
+    background-color: var(--primary-color);
+    display: flex;
+    flex-direction: column;
+    width: 72px;
+    flex-shrink: 0;
+    position: fixed;
+    height: 100%;
+    z-index: 99;
+    box-shadow: var(--boxShadowHorizontal);
+    transition: all 250ms ease;
+}
+
+.divider {
+    background-color: rgba(255, 255, 255, 0.47);
+    height: 2px;
+    width: 32px;
+    border-radius: 1px;
+}
+
+.repo {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 0 8px;
+}
+
+.repo .pill {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.repo .pill .item {
+    align-self: center;
+    display: block;
+    width: 8px;
+    border-radius: 0 4px 4px 0;
+    margin-left: -4px;
+    background-color: var(--text-color);
+    opacity: 0;
+    height: 48px;
+    transition: all 250ms ease;
+    transform: scaleY(0);
+}
+
+.repo.active .pill .item {
+    transform: scaleY(1);
+    opacity: 1;
+}
+
+.repo:hover .pill .item {
+    transform: scaleY(0.6);
+    border-radius: 0 8px 8px 0;
+    opacity: 1;
+}
+
+.repo.active:hover .pill .item {
+    transform: scaleY(1);
+    opacity: 1;
+}
+
+.repo > * {
+    pointer-events: none;
+}
+
+.repo .repoImage, .repo .addRepo .button {
+    width: 48px;
+    height: 48px;
+    transition: all 250ms ease;
+    border-radius: 100%;
+}
+
+.repo .addRepo {
+    margin-top: -16px;
+}
+
+.repo .addRepo .button {
+    clip-path: url(#squircle);
+    height: 48px;
+    width: 48px;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--success-color);
+    font-size: x-large;
+}
+
+.repo:hover .addRepo .button {
+    background-color: var(--success-color);
+    color: var(--text-color)
+}
+
+.repo:hover .repoImage, .repo.active .repoImage, .repo:hover .addRepo .button {
+    border-radius: unset;
+}
+
+.repo .tooltip {
+    width: 100px;
+    text-align: center;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 110%;
+    opacity: 0;
+    transform: scale(0) translateY(-50%);
+    transition: all 250ms ease;
+    padding: 0.5rem;
+}
+
+.repo .tooltip::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+  }
+
+.repo:hover .tooltip {
+    opacity: 1;
+    transform: scale(1) translateY(-50%);
+}
+
+@media only screen and (max-width: 560px) {
+    .Repos {
+        transform: translateX(-72px);
+    }
+    .Repos.sidebarOpened {
+        transform: unset;
+    }
+    .repo:first-child {
+        margin-top: 4rem;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .Repos {
+        background-color: var(--background-tertiary-color);
+    }
+
+    .divider {
+        background-color: hsla(217,calc(1*7.6%),33.5%,0.48);
+    }
+}
