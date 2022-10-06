@@ -59,15 +59,6 @@ const reposSlice = createSlice({
                 } else return repo;
             })
         },
-        addRepository: (state, action) => {
-            let lStorageRepos = JSON.parse(localStorage.getItem('repos'));
-
-            lStorageRepos = lStorageRepos.length > 0 ? lStorageRepos.append(action.payload) : [ ...state.repoURLs, { active: false, url: action.payload, data: {} } ];
-
-            state.repoURLs = lStorageRepos;
-
-            localStorage.setItem('repos', JSON.stringify(lStorageRepos));
-        },
         removeRepository: (state, action) => {
             let lStorageRepos = JSON.parse(localStorage.getItem('repos'));
 
@@ -77,6 +68,8 @@ const reposSlice = createSlice({
                 state.repoURLs = lStorageRepos;
     
                 localStorage.setItem('repos', JSON.stringify(lStorageRepos));
+
+                window.location.reload();
             } else return;
         },
         addEmoteToFavourites: (state, action) => {
@@ -87,7 +80,7 @@ const reposSlice = createSlice({
                 let repo = lStorageRepos.filter(repo => repo.url === url)[0];
                 lStorageRepos = lStorageRepos.filter(repo => repo.url !== url); 
                 
-                if(Object.keys(repo).contains('favourites')) {
+                if('favourites' in repo) {
                     repo.favourites.append(emote);
                 } else {
                     repo.favourites = [emote];
@@ -97,34 +90,45 @@ const reposSlice = createSlice({
 
                 state.repoURLs = lStorageRepos;
                 localStorage.setItem('repos', JSON.stringify(lStorageRepos));
-            } else {
-                lStorageRepos = [ ...state.repoURLs, 
-                    {
-                        active: false,
-                        url: url,
-                        data: {},
-                        favourites: [ emote ]
-                    } 
-                ];
-
-                state.repoURLs = lStorageRepos;
-                localStorage.setItem('repos', JSON.stringify(lStorageRepos));
-            }
+            } else return;
         }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchReposAsync.fulfilled, (state, action) => {
-            let newRepos = state.allRepos.map((repo) => {
-                let newRepo = repo;
-                if(newRepo.url === action.payload.url) {
-                    newRepo.data = action.payload.data;
-                    return newRepo;
-                } else {
-                    return repo;
+            if(state.allRepos.filter((repo) => repo.url === action.payload.url).length > 0) {
+                let newRepos = state.allRepos.map((repo) => {
+                    let newRepo = repo;
+                    if(newRepo.url === action.payload.url) {
+                        newRepo.data = action.payload.data;
+                        return newRepo;
+                    } else {
+                        return repo;
+                    }
+                });
+                state.allRepos = newRepos;
+                newRepos = state.allRepos.map((repo) => {
+                    return {
+                        ...repo,
+                        active: false,
+                        data: {}
+                    }
+                });
+                localStorage.setItem('repos', JSON.stringify(newRepos));
+            } else {
+                let newRepo = {
+                    active: false,
+                    url: action.payload.url,
+                    data: action.payload.data
                 }
-            });
-
-            state.allRepos = newRepos;
+                state.allRepos.push(newRepo);
+                let newRepos = state.allRepos.map((repo) => {
+                    return {
+                        ...repo,
+                        data: {}
+                    }
+                })
+                localStorage.setItem('repos', JSON.stringify(newRepos));
+            }
         });
     }
 });

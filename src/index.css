@@ -54,6 +54,9 @@ body {
   color: var(--text-color);
   background-color: var(--background-color);
   overflow: hidden auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 code {

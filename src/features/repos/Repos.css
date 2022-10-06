@@ -1,6 +1,7 @@
 .Repos {
+    --text-color: #fff;
     padding: 12px 0 0;
-    background-color: var(--background-tertiary-color);
+    background-color: var(--primary-color);
     display: flex;
     flex-direction: column;
     width: 72px;
@@ -13,7 +14,7 @@
 }
 
 .divider {
-    background-color: hsla(217,calc(1*7.6%),33.5%,0.48);
+    background-color: rgba(255, 255, 255, 0.47);
     height: 2px;
     width: 32px;
     border-radius: 1px;
@@ -140,6 +141,16 @@
         transform: unset;
     }
     .repo:first-child {
-        margin-top: 6rem;
+        margin-top: 4rem;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .Repos {
+        background-color: var(--background-tertiary-color);
+    }
+
+    .divider {
+        background-color: hsla(217,calc(1*7.6%),33.5%,0.48);
     }
 }

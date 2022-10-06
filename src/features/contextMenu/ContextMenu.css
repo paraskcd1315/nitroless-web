@@ -1,0 +1,93 @@
+.contextMenu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    background-color: hsla(220,calc(1*7.7%),22.9%, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 250ms ease;
+}
+
+.contextMenu:before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: -1;
+}
+
+.contextMenu.active {
+    opacity: 1;
+    pointer-events: unset;
+}
+
+.contextMenu .contextMenuContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all 250ms ease;
+}
+
+.contextMenu.active .contextMenuContainer {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.contextMenuContainer .emoteContainer {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.contextMenuContainer .contextMenuOptions {
+    display: flex;
+    flex-direction: column;
+    font-size: large;
+    background-color: var(--background-secondary-color);
+    border-radius: 1rem;
+    --border-color: rgba(193, 200, 215, 0.516);
+}
+
+.contextMenuOptions .option {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 250ms ease;
+}
+
+.contextMenuOptions .option:first-child {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+.contextMenuOptions .option:last-child {
+    border-bottom: unset;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.contextMenuOptions .option:hover {
+    background-color: var(--background-tertiary-color);
+}
+
+@media (prefers-color-scheme: dark) {
+    .contextMenuContainer .contextMenuOptions {
+        --border-color: rgba(73, 76, 83, 0.516);
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ReactSquircle from 'react-squircle';
 
 import { fetchReposAsync, setActiveRepository, setInactiveAllRepositories } from './reposSlice';
@@ -7,8 +7,7 @@ import './Repos.css';
 import logo from '../../assets/images/logo/index.png';
 import { selectedRepo } from '../emotes/emotesSlice';
 
-const Repos = ({ openSidebar }) => {
-    const [ homeActive, setHomeActive ] = useState(true);
+const Repos = ({ openSidebar, homeActive, setHomeActive }) => {
     const allRepos = useSelector((state) => state.repos.allRepos);
     const dispatch = useDispatch();
 
@@ -16,7 +15,6 @@ const Repos = ({ openSidebar }) => {
         allRepos.forEach(repo => {
             dispatch(fetchReposAsync(repo.url));
         });
-        
     // eslint-disable-next-line
     }, [dispatch]);
 
@@ -27,7 +25,7 @@ const Repos = ({ openSidebar }) => {
 
                     dispatch(selectedRepo({ url: '', urlData: {} }));
                     setHomeActive(true);
-                    dispatch(setInactiveAllRepositories())
+                    dispatch(setInactiveAllRepositories());
                 }}>
             <div className='pill'>
                 <span className='item'></span>
