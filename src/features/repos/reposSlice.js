@@ -1,11 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchRepoData } from "./reposAPI";
+import data from '../../default.json';
 
 const initialState = {
     loading: false,
     allRepos: JSON.parse(localStorage.getItem('repos')) && JSON.parse(localStorage.getItem('repos')).length > 0 
                     ? JSON.parse(localStorage.getItem('repos')) 
-                    : [ { active: false, url: 'https://lillieh001.github.io/nitroless/', data: {} } ]
+                    : data.map((repo) => {
+                        return {
+                            active: false,
+                            url: repo.charAt(repo.length - 1) !== '/' ? repo + '/' : repo,
+                            data: {}
+                        }
+                    })
 }
 
 export const fetchReposAsync = createAsyncThunk(
@@ -13,10 +20,14 @@ export const fetchReposAsync = createAsyncThunk(
     async (repoURL) => {
         const data = await fetchRepoData(repoURL);
 
-        return {
-            url: repoURL,
-            data: data
-        };
+        if(data && data !== undefined) {
+            return {
+                url: repoURL,
+                data: data
+            };
+        } else {
+            alert('Repo either doesn\'t exist or is invalid. If someone shared this Repo to you, please contact them to fix their repo.');
+        }
     });
 
 const reposSlice = createSlice({
@@ -51,7 +62,7 @@ const reposSlice = createSlice({
         addRepository: (state, action) => {
             let lStorageRepos = JSON.parse(localStorage.getItem('repos'));
 
-            lStorageRepos = lStorageRepos.length > 0 ? lStorageRepos.append(action.payload) : [ { active: false, url: action.payload, data: {} } ];
+            lStorageRepos = lStorageRepos.length > 0 ? lStorageRepos.append(action.payload) : [ ...state.repoURLs, { active: false, url: action.payload, data: {} } ];
 
             state.repoURLs = lStorageRepos;
 
@@ -87,12 +98,14 @@ const reposSlice = createSlice({
                 state.repoURLs = lStorageRepos;
                 localStorage.setItem('repos', JSON.stringify(lStorageRepos));
             } else {
-                lStorageRepos = [ {
-                    active: false,
-                    url: url,
-                    data: {},
-                    favourites: [ emote ]
-                } ];
+                lStorageRepos = [ ...state.repoURLs, 
+                    {
+                        active: false,
+                        url: url,
+                        data: {},
+                        favourites: [ emote ]
+                    } 
+                ];
 
                 state.repoURLs = lStorageRepos;
                 localStorage.setItem('repos', JSON.stringify(lStorageRepos));

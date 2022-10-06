@@ -58,7 +58,14 @@ const Repos = ({ openSidebar }) => {
         <div className='repo'>
             <div className='divider'></div>
         </div>
-        <div className='repo'>
+        <div className='repo' onClick={(e) => {
+            e.preventDefault();
+
+            let url = window.prompt('Enter URL for the Repository');
+            url = url.charAt(url.length - 1) !== '/' ? url + '/' : url;
+            
+            dispatch(fetchReposAsync(url));
+        }}>
             <div className='addRepo'>
                 <svg width="0" height="0"><defs><clipPath id="squircle" clipPathUnits="objectBoundingBox"><path d="M .5,0 C .1,0 0,.1 0,.5 0,.9 .1,1 .5,1 .9,1 1,.9 1,.5 1,.1 .9,0 .5,0 Z"></path></clipPath></defs></svg>
                 <div className='button'>

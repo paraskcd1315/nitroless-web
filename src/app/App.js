@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 
 import Emotes from '../features/emotes/Emotes';
 import Repos from '../features/repos/Repos';
@@ -9,7 +9,7 @@ function App() {
   const [ openSidebar, setOpenSidebar ] = useState(false);
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className='App'>
         <div className='sidebar'>   
           <Repos openSidebar={openSidebar} />
@@ -20,7 +20,7 @@ function App() {
           </Routes>
         </div>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

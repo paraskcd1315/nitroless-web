@@ -77,7 +77,7 @@ const Emotes = ({ openSidebar, setOpenSidebar }) => {
                                 return (
                                     <div key={index} className='emoteContainer' {...longPressProps}>
                                         <div className='emoteImageContainer'>
-                                            <ReactSquircle imageUrl={url + urlData.path + '/' + emote.name + '.' + emote.type} alt={emote.name} width={48} height={48} />
+                                            <ReactSquircle imageUrl={urlData.path !== '' ? url + urlData.path + '/' + emote.name + '.' + emote.type : url + emote.name + '.' + emote.type} alt={emote.name} width={48} height={48} />
                                         </div>
                                     </div>
                                 )
