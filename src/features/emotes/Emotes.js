@@ -5,22 +5,35 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './Emotes.css'
 import useWindowDimensions from '../../customHooks/WindowDimensions/useWindowDimensions';
-import { removeRepository, setInactiveAllRepositories } from '../repos/reposSlice';
+import { addToFrequentlyUsed, removeRepository, setInactiveAllRepositories } from '../repos/reposSlice';
 import useLongPress from '../../customHooks/LongPress/useLongPress';
 import { selectedEmote } from '../contextMenu/contextMenuSlice';
 
 const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActive }) => {
     const { width } = useWindowDimensions();
+    const allRepos = useSelector(state => state.repos.allRepos);
     const url = useSelector(state => state.emotes.url);
     const urlData = useSelector(state => state.emotes.urlData);
+    const favourites = useSelector(state => state.emotes.favourites);
+    const frequentlyUsed = useSelector(state => state.repos.frequentlyUsed);
 
     // TODO
     // const [ showCopyFeedback, setShowCopyFeedback ] = useState(false);
 
     const longPressProps = useLongPress({
-        onClick: (ev) => {
-            const copyText = ev.target.lastChild.lastChild.lastChild.src;
+        onClick: (e) => {
+            const copyText = e.target.lastChild.lastChild.lastChild.src;
             window.navigator.clipboard.writeText(copyText);
+
+            let emoteURL = copyText.split('/')
+            let emote = emoteURL[emoteURL.length - 1].split('.');
+            dispatch(addToFrequentlyUsed({
+                url: url,
+                path: urlData.path,
+                emote: {
+                    name: emote[0], type: emote[1]
+                }
+            }))
         },
         onLongPress: (e) => {
             const userAgent = window.navigator.userAgent;
@@ -53,7 +66,55 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                     <h1 className="pageTitle">NITROLESS</h1>
                 </div>
                 <div className="urlContent">
-                    <div className="dashboard"></div>
+                    <div className='navigation'>
+                        <div className='navItem active'>
+                            <span className='navItemName'>Home</span>
+                        </div>
+                        <div className='navItem'>
+                            <span className='navItemName'>About</span>
+                        </div>
+                        <div className='navItem'>
+                            <span className='navItemName'>Downloads</span>
+                        </div>
+                    </div>
+                    <div className='frequentlyUsedEmotes'>
+                        <h1><i className="fa fa-history"></i> Frequently used Emotes</h1>
+                        <div className='frequentlyUsedEmotesContainer' style={frequentlyUsed.length < 1 ? {display: 'flex'} : {}}>
+                            {
+                                frequentlyUsed.length > 0 ? frequentlyUsed.map((emote, index) => {
+                                    return (
+                                        <div key={index} id={emote.url} className='emoteContainer' {...longPressProps} >
+                                            <div className='emoteImageContainer'>
+                                                <ReactSquircle imageUrl={emote.path !== '' ? emote.url + emote.path + '/' + emote.emote.name + '.' + emote.emote.type : emote.url + emote.emote.name + '.' + emote.emote.type} alt={emote.emote.name} width={48} height={48} />
+                                            </div>
+                                        </div>
+                                    )
+                                }) : (<p>Start using Nitroless to show your frequently used emotes here.</p>)
+                            }
+                        </div>
+                    </div>
+                    {
+                        allRepos.map((repo, index) => {
+                            return repo.favourites && repo.favourites.length > 0 ? (
+                                <div key={index} className='favouriteEmotes'>
+                                    <h1><i className="fa fa-star"></i> {repo.data.name}'s Favourite Emotes</h1>
+                                    <div className='favouriteEmotesContainer'>
+                                        {
+                                            repo.favourites.map((emote, indexx) => {
+                                                return (
+                                                    <div key={index + indexx} id={repo.url} className='emoteContainer' {...longPressProps} >
+                                                        <div className='emoteImageContainer'>
+                                                            <ReactSquircle imageUrl={repo.data.path !== '' ? repo.url + repo.data.path + '/' + emote.name + '.' + emote.type : repo.url + emote.name + '.' + emote.type} alt={emote.name} width={48} height={48} />
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </div>
+                            ) : ""
+                        })
+                    }
                 </div>
             </div>
         )
@@ -119,11 +180,24 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                         }
                         </div>
                     </div>
-                    <div className='favouriteEmotes'>
-                        <h1>★ Favourite Emotes</h1>
-                        <div className='favouriteEmotesContainer'>
+                    {favourites && favourites.length > 0 ? (
+                        <div className='favouriteEmotes'>
+                            <h1><i className="fa fa-star"></i> Favourite Emotes</h1>
+                            <div className='favouriteEmotesContainer'>
+                            {
+                                favourites.map((emote, index) => {
+                                    return (
+                                        <div key={index} id={url} className='emoteContainer' {...longPressProps} >
+                                            <div className='emoteImageContainer'>
+                                                <ReactSquircle imageUrl={urlData.path !== '' ? url + urlData.path + '/' + emote.name + '.' + emote.type : url + emote.name + '.' + emote.type} alt={emote.name} width={48} height={48} />
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+                            </div>
                         </div>
-                    </div>
+                    ) : ""}
                 </div>
             </div>
         )

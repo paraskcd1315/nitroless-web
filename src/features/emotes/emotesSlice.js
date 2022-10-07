@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     url: '',
-    urlData: {}
+    urlData: {},
+    favourites: []
 }
 
 const emotesSlice = createSlice({
@@ -10,14 +11,18 @@ const emotesSlice = createSlice({
     initialState,
     reducers: {
         selectedRepo: (state, action) => {
-            const { url, urlData } = action.payload;
+            const { url, urlData, favourites } = action.payload;
 
             state.url = url;
             state.urlData = urlData;
+            state.favourites = favourites && favourites.length > 0 ? favourites : []
+        },
+        updateFavourites: (state, action) => {
+            state.favourites.push(action.payload); 
         }
     }
 });
 
-export const { selectedRepo } = emotesSlice.actions;
+export const { selectedRepo, updateFavourites } = emotesSlice.actions;
 
 export default emotesSlice.reducer

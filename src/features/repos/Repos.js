@@ -41,7 +41,7 @@ const Repos = ({ openSidebar, homeActive, setHomeActive }) => {
                 <div key={index} className={`repo${repo.active ? ' active' : ''}`} onClick={(e) => {
                     e.preventDefault();
 
-                    dispatch(selectedRepo({ url: repo.url, urlData: repo.data }));
+                    dispatch(selectedRepo({ url: repo.url, urlData: repo.data, favourites: repo.favourites }));
                     setHomeActive(false);
                     dispatch(setActiveRepository({url: repo.url}));
                 }}>

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchRepoData } from "./reposAPI";
+import { areObjectsEqual } from "../../utils/objectsEqual";
 import data from '../../default.json';
 
 const initialState = {
@@ -12,7 +13,10 @@ const initialState = {
                             url: repo.charAt(repo.length - 1) !== '/' ? repo + '/' : repo,
                             data: {}
                         }
-                    })
+                    }),
+    frequentlyUsed: JSON.parse(localStorage.getItem('frequentlyUsed')) && JSON.parse(localStorage.getItem('frequentlyUsed')).length > 0
+                    ? JSON.parse(localStorage.getItem('frequentlyUsed'))
+                    : []
 }
 
 export const fetchReposAsync = createAsyncThunk(
@@ -65,32 +69,45 @@ const reposSlice = createSlice({
             if(lStorageRepos.length > 0) {
                 lStorageRepos = lStorageRepos.filter(repo => repo.url !== action.payload);
     
-                state.repoURLs = lStorageRepos;
+                state.allRepos = lStorageRepos;
     
                 localStorage.setItem('repos', JSON.stringify(lStorageRepos));
-
-                window.location.reload();
             } else return;
         },
         addEmoteToFavourites: (state, action) => {
             const { url, emote } = action.payload;
-            let lStorageRepos = JSON.parse(localStorage.getItem('repos'));
 
-            if(lStorageRepos.length > 0) {
-                let repo = lStorageRepos.filter(repo => repo.url === url)[0];
-                lStorageRepos = lStorageRepos.filter(repo => repo.url !== url); 
-                
-                if('favourites' in repo) {
-                    repo.favourites.append(emote);
-                } else {
-                    repo.favourites = [emote];
+            let newRepos = state.allRepos.map((repo) => {
+                if(repo.url === url) {
+                    repo.favourites = 'favourites' in repo ? [...repo.favourites, emote] : [emote];
+                    return repo;
+                } else return repo;
+            });
+
+            state.allRepos = newRepos;
+
+            localStorage.setItem('repos', JSON.stringify(newRepos.map((repo) => ({...repo, active: false, data: {}}))))
+        },
+        addToFrequentlyUsed: (state, action) => {
+            if(state.frequentlyUsed.length > 0) {
+                if(state.frequentlyUsed.filter((freq) => {
+                    return areObjectsEqual(freq, action.payload)
+                }).length > 0) {
+                    state.frequentlyUsed = state.frequentlyUsed.filter((freq) => {
+                        return !areObjectsEqual(freq, action.payload)
+                    });
+                } 
+
+                state.frequentlyUsed.unshift(action.payload);
+
+                if(state.frequentlyUsed.length === 25) {
+                    state.frequentlyUsed.slice(-1);
                 }
+            } else {
+                state.frequentlyUsed = [action.payload];
+            }
 
-                lStorageRepos.append(repo);
-
-                state.repoURLs = lStorageRepos;
-                localStorage.setItem('repos', JSON.stringify(lStorageRepos));
-            } else return;
+            localStorage.setItem('frequentlyUsed', JSON.stringify(state.frequentlyUsed));
         }
     },
     extraReducers: (builder) => {
@@ -133,6 +150,6 @@ const reposSlice = createSlice({
     }
 });
 
-export const { addRepository, removeRepository, loading, setActiveRepository, setInactiveAllRepositories } = reposSlice.actions;
+export const { addToFrequentlyUsed, addEmoteToFavourites, removeRepository, loading, setActiveRepository, setInactiveAllRepositories } = reposSlice.actions;
 
 export default reposSlice.reducer;
