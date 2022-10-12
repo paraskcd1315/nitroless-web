@@ -61,7 +61,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-left: 3.25rem;
+    margin-left: 2.4rem;
+}
+
+.Home .urlContent .HomeContainer {
+    margin-left: -2rem;
+}
+
+.HomeContainer > div, .AboutContainer > div {
+    width: 94%;
 }
 
 .emotesHeader, .urlDetails {
@@ -115,8 +123,8 @@
     margin-right: 1rem;
 }
 
-.Home .favouriteEmotes {
-    margin-left: unset;
+.HomeContainer .favouriteEmotes {
+    margin-left: 1rem;
     margin-bottom: 1rem;
 }
 
@@ -124,9 +132,8 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
-.favouriteEmotes {
+.favouriteEmotes, .frequentlyUsedEmotes, .About, .Socials, .Credits {
     margin-left: 1rem;
-    width: 100%;
     overflow: hidden scroll;
     background-color: var(--background-tertiary-color);
     padding: 1rem;
@@ -135,14 +142,74 @@
     border: 1px solid var(--border-color);
 }
 
-.frequentlyUsedEmotes {
-    width: 100%;
-    overflow: hidden scroll;
-    background-color: var(--background-tertiary-color);
-    padding: 1rem;
-    border-radius: 1rem;
-    box-shadow: var(--boxShadow);
-    border: 1px solid var(--border-color);
+.Socials {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.Socials .socials {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.Credits, .Credits .credits {
+    display: flex;
+    flex-direction: column;
+}
+
+.Credits .credits {
+    padding: 0 1rem;
+}
+
+.credits .header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.credits .header .text {
+    display: flex;
+    flex-direction: column;
+}
+
+.credits .header .title {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.credits .header .Subtitles {
+    margin-top: 1rem;
+}
+
+.Subtitles .subtitles {
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.Subtitles .subtitles > span {
+    margin-left: 0.5rem;
+}
+
+.credits .header > img {
+    width: 64px;
+    height: 64px;
+    border-radius: 99rem;
+}
+
+.credits .header > .text {
+    margin-left: 1rem;
+}
+
+.Socials .socials > span {
+    margin-left: 1rem;
+}
+
+.frequentlyUsedEmotes, .About, .Socials, .favouriteEmotes, .Credits {
     margin-bottom: 1rem;
 }
 
@@ -176,18 +243,28 @@
     border: 1px solid var(--border-color);
 }
 
-.emotesContainer .emoteContainer {
+.emoteContainer {
     cursor: pointer;
     transform: scale(1);
     transition: all 250ms ease;
 }
 
-.emotesContainer .emoteContainer:hover {
+.emoteContainer:hover {
     transform: scale(1.5);
 }
 
-.emotesContainer .emoteContainer > * {
+.emoteContainer > * {
     pointer-events: none;
+}
+
+.Home .urlContent .AboutContainer {
+    margin-left: -1rem;
+}
+
+@media only screen and (max-width: 1200px) {
+    .Home .urlContent .AboutContainer {
+        margin-left: -2rem;
+    }
 }
 
 @media only screen and (max-width: 1100px) {
@@ -213,15 +290,39 @@
     .emotesContainer {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
+
+    .frequentlyUsedEmotes .favouriteEmotesContainer {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .Home .favouriteEmotesContainer {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
 }
 
 @media only screen and (max-width: 625px) {
+    .HomeContainer > div, .AboutContainer > div {
+        width: 92%;
+    }
+
     .emotesContainer {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .frequentlyUsedEmotes .frequentlyUsedEmotesContainer {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .Home .favouriteEmotesContainer {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 }
 
 @media only screen and (max-width: 560px) {
+    .Home .urlContent {
+        margin-left: unset;
+    }
+
     .pageHeader {
         padding: 1rem;
         background-color: var(--background-tertiary-color);
@@ -353,6 +454,14 @@
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     }
 
+    .frequentlyUsedEmotes .frequentlyUsedEmotesContainer {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+
+    .Home .favouriteEmotesContainer {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+
     .favouriteEmotes {
         margin-bottom: 2rem;
     }
@@ -360,6 +469,14 @@
 
 @media only screen and (max-width: 400px) {
     .emotesContainer {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .frequentlyUsedEmotes .frequentlyUsedEmotesContainer {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .Home .favouriteEmotesContainer {
         grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }

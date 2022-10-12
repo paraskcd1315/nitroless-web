@@ -1,19 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchRepoData } from "./reposAPI";
 import { areObjectsEqual } from "../../utils/objectsEqual";
-import data from '../../default.json';
+import axios from "axios";
+
+axios.get("https://nitroless.github.io/default.json").then((res) => {
+    if (JSON.parse(localStorage.getItem('repos')) && JSON.parse(localStorage.getItem('repos')).length > 0) {
+        return
+    } else {
+        let repos = res.data.map((repo) => ({url: repo, active: false, data: {}}));
+        localStorage.setItem('repos', JSON.stringify(repos))
+        window.location.reload();
+    }
+})
 
 const initialState = {
     loading: false,
     allRepos: JSON.parse(localStorage.getItem('repos')) && JSON.parse(localStorage.getItem('repos')).length > 0 
                     ? JSON.parse(localStorage.getItem('repos')) 
-                    : data.map((repo) => {
-                        return {
-                            active: false,
-                            url: repo.charAt(repo.length - 1) !== '/' ? repo + '/' : repo,
-                            data: {}
-                        }
-                    }),
+                    : [],
     frequentlyUsed: JSON.parse(localStorage.getItem('frequentlyUsed')) && JSON.parse(localStorage.getItem('frequentlyUsed')).length > 0
                     ? JSON.parse(localStorage.getItem('frequentlyUsed'))
                     : []

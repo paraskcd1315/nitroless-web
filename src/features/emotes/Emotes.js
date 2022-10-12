@@ -16,6 +16,9 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
     const urlData = useSelector(state => state.emotes.urlData);
     const favourites = useSelector(state => state.emotes.favourites);
     const frequentlyUsed = useSelector(state => state.repos.frequentlyUsed);
+    const [isDownloadsActive, setIsDownloadsActive] = useState(false);
+    const [isAboutActive, setIsAboutActive] = useState(false);
+    const [isHomeActive, setIsHomeActive] = useState(true);
 
     // TODO
     // const [ showCopyFeedback, setShowCopyFeedback ] = useState(false);
@@ -24,12 +27,12 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
         onClick: (e) => {
             const copyText = e.target.lastChild.lastChild.lastChild.src;
             window.navigator.clipboard.writeText(copyText);
-
             let emoteURL = copyText.split('/')
+            console.log(emoteURL)
             let emote = emoteURL[emoteURL.length - 1].split('.');
             dispatch(addToFrequentlyUsed({
-                url: url,
-                path: urlData.path,
+                url: `${emoteURL[0]}//${emoteURL[2]}`,
+                path: copyText.split('/')[3].includes(".") ? "" : emoteURL[3],
                 emote: {
                     name: emote[0], type: emote[1]
                 }
@@ -67,53 +70,236 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                 </div>
                 <div className="urlContent">
                     <div className='navigation'>
-                        <div className='navItem active'>
+                        <div className={`navItem${isHomeActive ? ' active' : ''}`} onClick={(e) => {
+                            e.preventDefault();
+
+                            setIsDownloadsActive(false);
+                            setIsAboutActive(false);
+                            setIsHomeActive(true)
+                        }}>
                             <span className='navItemName'>Home</span>
                         </div>
-                        <div className='navItem'>
+                        <div className={`navItem${isAboutActive ? ' active' : ''}`} onClick={(e) => {
+                            e.preventDefault();
+
+                            setIsDownloadsActive(false);
+                            setIsAboutActive(true);
+                            setIsHomeActive(false)
+                        }}>
                             <span className='navItemName'>About</span>
                         </div>
-                        <div className='navItem'>
+                        <div className={`navItem${isDownloadsActive ? ' active' : ''}`} onClick={(e) => {
+                            e.preventDefault();
+
+                            setIsDownloadsActive(true);
+                            setIsAboutActive(false);
+                            setIsHomeActive(false)
+                        }}>
                             <span className='navItemName'>Downloads</span>
                         </div>
                     </div>
-                    <div className='frequentlyUsedEmotes'>
-                        <h1><i className="fa fa-history"></i> Frequently used Emotes</h1>
-                        <div className='frequentlyUsedEmotesContainer' style={frequentlyUsed.length < 1 ? {display: 'flex'} : {}}>
-                            {
-                                frequentlyUsed.length > 0 ? frequentlyUsed.map((emote, index) => {
-                                    return (
-                                        <div key={index} id={emote.url} className='emoteContainer' {...longPressProps} >
-                                            <div className='emoteImageContainer'>
-                                                <ReactSquircle imageUrl={emote.path !== '' ? emote.url + emote.path + '/' + emote.emote.name + '.' + emote.emote.type : emote.url + emote.emote.name + '.' + emote.emote.type} alt={emote.emote.name} width={48} height={48} />
-                                            </div>
-                                        </div>
-                                    )
-                                }) : (<p>Start using Nitroless to show your frequently used emotes here.</p>)
-                            }
-                        </div>
-                    </div>
                     {
-                        allRepos.map((repo, index) => {
-                            return repo.favourites && repo.favourites.length > 0 ? (
-                                <div key={index} className='favouriteEmotes'>
-                                    <h1><i className="fa fa-star"></i> {repo.data.name}'s Favourite Emotes</h1>
-                                    <div className='favouriteEmotesContainer'>
+                    isHomeActive 
+                    ?
+                        (
+                        <div className='HomeContainer'>
+                            <div className='frequentlyUsedEmotes'>
+                                <h1><i className="fa fa-history"></i> Frequently used Emotes</h1>
+                                <div className='frequentlyUsedEmotesContainer' style={frequentlyUsed.length < 1 ? {display: 'flex'} : {}}>
                                         {
-                                            repo.favourites.map((emote, indexx) => {
+                                            frequentlyUsed.length > 0 ? frequentlyUsed.map((emote, index) => {
                                                 return (
-                                                    <div key={index + indexx} id={repo.url} className='emoteContainer' {...longPressProps} >
+                                                    <div key={index} id={emote.url} className='emoteContainer' {...longPressProps} >
                                                         <div className='emoteImageContainer'>
-                                                            <ReactSquircle imageUrl={repo.data.path !== '' ? repo.url + repo.data.path + '/' + emote.name + '.' + emote.type : repo.url + emote.name + '.' + emote.type} alt={emote.name} width={48} height={48} />
+                                                            <ReactSquircle imageUrl={emote.path !== '' ? emote.url + '/' + emote.path + '/' + emote.emote.name + '.' + emote.emote.type : emote.url + '/' + emote.emote.name + '.' + emote.emote.type} alt={emote.emote.name} width={48} height={48} />
                                                         </div>
                                                     </div>
                                                 )
-                                            })
+                                            }) : (<p>Start using Nitroless to show your frequently used emotes here.</p>)
                                         }
+                                </div>
+                            </div>
+                            
+                            {
+                                allRepos.map((repo, index) => {
+                                    return repo.favourites && repo.favourites.length > 0 ? (
+                                        <div key={index} className='favouriteEmotes'>
+                                            <h1><i className="fa fa-star"></i> {repo.data.name}'s Favourite Emotes</h1>
+                                            <div className='favouriteEmotesContainer'>
+                                                {
+                                                    repo.favourites.map((emote, indexx) => {
+                                                        return (
+                                                            <div key={index + indexx} id={repo.url} className='emoteContainer' {...longPressProps} >
+                                                                <div className='emoteImageContainer'>
+                                                                    <ReactSquircle imageUrl={repo.data.path !== '' ? repo.url + '/' + repo.data.path + '/' + emote.name + '.' + emote.type : repo.url + '/' + emote.name + '.' + emote.type} alt={emote.name} width={48} height={48} />
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+                                    ) : ""
+                                })
+                            }
+                        </div>
+                        )
+                    :
+                        ""
+                    }
+                    {
+                    isAboutActive
+                    ?
+                        (<div className='AboutContainer'>
+                            <div className='About'>
+                                <h1><i className="fa fa-info-circle"></i> About</h1>
+                                <p>Nitroless is a small open source project made by students to help people without Nitro be able to use the community's Emotes to be used in discord. Nitroless is entirely community based requiring the community to make repositories where they can insert their own emotes and share them back to the community. The community uses this service by clicking/tapping on the image and it gets copied in their system's clipboard, allowing them to paste the Emote URL in Discord for the people to see.</p>
+                            </div>
+                            <div className='Socials'>
+                                <div className='socials Github' onClick={(e) => window.location.href = "https://github.com/Nitroless"}>
+                                    <i className='fa fa-github'></i>
+                                    <span>Github </span>
+                                </div>
+                                <div className='socials Link' onClick={(e) => window.location.href = "https://nitroless.github.io/"}>
+                                    <i className='fa fa-link'></i>
+                                    <span>Website </span>
+                                </div>
+                                <div className='socials Twitter' onClick={(e) => window.location.href = "https://twitter.com/nitroless_"}>
+                                    <i className='fa fa-twitter'></i>
+                                    <span>Twitter </span>
+                                </div>
+                            </div>
+                            <div className='Credits'>
+                                <h1><i className="fa fa-info-circle"></i> Credits</h1>
+
+                                <div className='credits' style={{marginBottom: "2rem"}}>
+                                    <div className='header'>
+                                        <img src="https://github.com/TheAlphaStream.png" alt="Alpha_Stream" />
+                                        <div className='text'>
+                                            <span className='title'>Alpha_Stream</span>
+                                            <span className='sub'>Founder and Designer</span>
+                                            <div className='Subtitles'>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://alphastream.weebly.com/"}>
+                                                    <i className='fa fa-link'></i>
+                                                    <span>Portfolio</span>
+                                                </div>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://github.com/TheAlphaStream/"}>
+                                                    <i className='fa fa-github'></i>
+                                                    <span>TheAlphaStream</span>
+                                                </div>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://twitter.com/Kutarin_/"}>
+                                                    <i className='fa fa-twitter'></i>
+                                                    <span>@Kutarin_</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            ) : ""
-                        })
+
+                                <div className='credits' style={{marginBottom: "2rem"}}>
+                                    <div className='header'>
+                                        <img src="https://github.com/paraskcd1315.png" alt="Paras KCD" />
+                                        <div className='text'>
+                                            <span className='title'>Paras KCD</span>
+                                            <span className='sub'>Web and macOS Developer</span>
+                                            <div className='Subtitles'>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://paraskcd.com/"}>
+                                                    <i className='fa fa-link'></i>
+                                                    <span>Portfolio</span>
+                                                </div>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://github.com/paraskcd1315/"}>
+                                                    <i className='fa fa-github'></i>
+                                                    <span>paraskcd1315</span>
+                                                </div>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://twitter.com/ParasKCD"}>
+                                                    <i className='fa fa-twitter'></i>
+                                                    <span>@ParasKCD</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className='credits' style={{marginBottom: "2rem"}}>
+                                    <div className='header'>
+                                        <img src="https://github.com/llsc12.png" alt="llsc12" />
+                                        <div className='text'>
+                                            <span className='title'>LLSC12</span>
+                                            <span className='sub'>iOS and macOS Developer</span>
+                                            <div className='Subtitles'>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://llsc12.github.io/"}>
+                                                    <i className='fa fa-link'></i>
+                                                    <span>Portfolio</span>
+                                                </div>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://github.com/llsc12/"}>
+                                                    <i className='fa fa-github'></i>
+                                                    <span>llsc12</span>
+                                                </div>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://twitter.com/llsc121"}>
+                                                    <i className='fa fa-twitter'></i>
+                                                    <span>@llsc121</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className='credits' style={{marginBottom: "2rem"}}>
+                                    <div className='header'>
+                                        <img src="https://github.com/Superbro9.png" alt="Superbro" />
+                                        <div className='text'>
+                                            <span className='title'>Superbro</span>
+                                            <span className='sub'>iOS and macOS Adviser, Quality Control</span>
+                                            <div className='Subtitles'>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://github.com/Superbro9/"}>
+                                                    <i className='fa fa-github'></i>
+                                                    <span>Superbro9</span>
+                                                </div>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://twitter.com/suuperbro/"}>
+                                                    <i className='fa fa-twitter'></i>
+                                                    <span>@suuperbro</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className='credits' style={{marginBottom: "1rem"}}>
+                                    <div className='header'>
+                                        <img src="https://github.com/LillieH001.png" alt="Lillie" />
+                                        <div className='text'>
+                                            <span className='title'>Lillie</span>
+                                            <span className='sub'>Windows Developer</span>
+                                            <div className='Subtitles'>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://lillieh001.github.io/"}>
+                                                    <i className='fa fa-link'></i>
+                                                    <span>Portfolio</span>
+                                                </div>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://github.com/LillieH001/"}>
+                                                    <i className='fa fa-github'></i>
+                                                    <span>LillieH001</span>
+                                                </div>
+                                                <div className='subtitles' onClick={(e) => window.location.href = "https://twitter.com/LillieWeeb/"}>
+                                                    <i className='fa fa-twitter'></i>
+                                                    <span>@LillieWeeb</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>)
+                    :
+                        ""
+                    }
+                    {
+                    isDownloadsActive
+                    ?
+                        (<div className='DownloadsContainer'>
+                            Under construction, come back later ;)
+                        </div>)
+                    :
+                        ""
                     }
                 </div>
             </div>
