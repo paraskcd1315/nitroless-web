@@ -68,15 +68,14 @@ const reposSlice = createSlice({
             })
         },
         removeRepository: (state, action) => {
-            let lStorageRepos = JSON.parse(localStorage.getItem('repos'));
-
-            if(lStorageRepos.length > 0) {
-                lStorageRepos = lStorageRepos.filter(repo => repo.url !== action.payload);
+            state.allRepos = state.allRepos.filter(repo => repo.url !== action.payload);
     
-                state.allRepos = lStorageRepos;
-    
-                localStorage.setItem('repos', JSON.stringify(lStorageRepos));
-            } else return;
+            localStorage.setItem('repos', JSON.stringify(state.allRepos.map(repo => {
+                return {
+                    ...repo,
+                    data: {}
+                }
+            })));
         },
         addEmoteToFavourites: (state, action) => {
             const { url, emote } = action.payload;
