@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { ColorRing } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
 import ContextMenu from '../features/contextMenu/ContextMenu';
 import { selectedEmote } from '../features/contextMenu/contextMenuSlice';
@@ -12,6 +13,7 @@ function App() {
   const [ openSidebar, setOpenSidebar ] = useState(false);
   const [ homeActive, setHomeActive ] = useState(true);
   const [ contextmenuActive, setContextMenuActive ] = useState(false);
+  const [ isLoading, setIsLoading ] = useState(true);
 
   useEffect(() => {
     const contextMenuEventHandler = (e) => {
@@ -33,13 +35,37 @@ function App() {
 
   return (
       <div className='App'>
+        {
+        
+        isLoading ?
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
+          }}>
+            <ColorRing
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+              colors={['#5865F2', '#5865F2', '#5865F2', '#5865F2', '#5865F2']}
+            /> 
+          </div>
+        : ""
+        
+        }
+
         <div className='sidebar'>   
-          <Repos openSidebar={openSidebar} homeActive={homeActive} setHomeActive={setHomeActive} />
+          <Repos openSidebar={openSidebar} homeActive={homeActive} setHomeActive={setHomeActive} isLoading={isLoading} setIsLoading={setIsLoading} />
         </div>
         <div className='mainContent'>
-          <Emotes openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} setHomeActive={setHomeActive} setContextMenuActive={setContextMenuActive} />
+          <Emotes openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} setHomeActive={setHomeActive} setContextMenuActive={setContextMenuActive} isLoading={isLoading} />
           <ContextMenu contextmenuActive={contextmenuActive} setContextMenuActive={setContextMenuActive} />
         </div>
+        
       </div>
   );
 }
