@@ -37,7 +37,7 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                 const repo = allRepos.filter((rep) => rep.url === e.target.id)[0];
                 let emoteURL = e.target.lastChild.lastChild.lastChild.src.split('/')
                 let emote = emoteURL[emoteURL.length - 1].split('.');
-                if(repo.favourites.filter((fav) => areObjectsEqual(fav, {name: emote[0], type: emote[1]})).length > 0) {
+                if(repo.favourites && repo.favourites.filter((fav) => areObjectsEqual(fav, {name: emote[0], type: emote[1]})).length > 0) {
                     dispatch(selectedFavouriteEmote({
                         url: e.target.id,
                         path: allRepos.filter((rep) => rep.url === e.target.id)[0].data.path,
