@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchRepoData } from "./reposAPI";
 import axios from "axios";
+import { areObjectsEqual } from "../../utils/objectsEqual";
 
 axios.get("https://nitroless.github.io/default.json").then((res) => {
     if (JSON.parse(localStorage.getItem('repos')) && JSON.parse(localStorage.getItem('repos')).length > 0) {
@@ -82,18 +83,32 @@ const reposSlice = createSlice({
             let newRepos = state.allRepos.map((repo) => {
                 if(repo.url === url) {
                     repo.favourites = 'favourites' in repo ? [...repo.favourites, emote] : [emote];
-                    return repo;
-                } else return repo;
+                } 
+                return repo;
             });
 
             state.allRepos = newRepos;
 
             localStorage.setItem('repos', JSON.stringify(newRepos.map((repo) => ({...repo, active: false, data: {}}))))
         },
+        removeEmoteFromFavourites: (state, action) => {
+            const { url, emote } = action.payload;
+
+            let newRepos = state.allRepos.map((repo) => {
+                if(repo.url === url) {
+                    repo.favourites = repo.favourites.filter((fav) => !areObjectsEqual(fav, emote));
+                }
+                return repo;
+            });
+
+            state.allRepos = newRepos;
+
+            localStorage.setItem('repos', JSON.stringify(newRepos.map((repo) => ({...repo, active: false, data: {}}))));
+        },
         addToFrequentlyUsed: (state, action) => {
             if(state.frequentlyUsed.length > 0) {
-                if(state.frequentlyUsed.filter((freq) => freq === action.payload).length > 0) {
-                    state.frequentlyUsed = state.frequentlyUsed.filter((freq) => freq !== action.payload);
+                if(state.frequentlyUsed.filter((freq) => freq.includes(action.payload.split('/')[action.payload.split('/').length - 1].split('.')[0]))) {
+                    state.frequentlyUsed = state.frequentlyUsed.filter((freq) => !freq.includes(action.payload.split('/')[action.payload.split('/').length - 1].split('.')[0]));
                 } 
 
                 state.frequentlyUsed.unshift(action.payload);
@@ -148,6 +163,6 @@ const reposSlice = createSlice({
     }
 });
 
-export const { addToFrequentlyUsed, addEmoteToFavourites, removeRepository, loading, setActiveRepository, setInactiveAllRepositories } = reposSlice.actions;
+export const { addToFrequentlyUsed, addEmoteToFavourites, removeRepository, loading, setActiveRepository, setInactiveAllRepositories, removeEmoteFromFavourites } = reposSlice.actions;
 
 export default reposSlice.reducer;

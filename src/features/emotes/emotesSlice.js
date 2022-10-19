@@ -20,7 +20,7 @@ const emotesSlice = createSlice({
             state.favourites = favourites && favourites.length > 0 ? favourites : []
         },
         updateFavourites: (state, action) => {
-            state.favourites.push(action.payload); 
+            state.favourites = action.payload;
         }
     }
 });

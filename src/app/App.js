@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { ColorRing } from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import ContextMenu from '../features/contextMenu/ContextMenu';
-import { selectedEmote, selectedRepoContext } from '../features/contextMenu/contextMenuSlice';
+import { selectedEmote, selectedFavouriteEmote, selectedRepoContext } from '../features/contextMenu/contextMenuSlice';
 
 import Emotes from '../features/emotes/Emotes';
 import Repos from '../features/repos/Repos';
@@ -34,6 +34,15 @@ function App() {
             icon: repo.data.icon,
             name: repo.data.name
           }));
+        }
+
+        if(e.target.className.includes("favouriteEmotesEmoteContainer")) {
+          dispatch(selectedFavouriteEmote({
+            url: e.target.id,
+            path: allRepos.filter((rep) => rep.url === e.target.id)[0].data.path,
+            name: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
+            type: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
+          }))
         }
 
         setContextMenuActive(true);

@@ -9,6 +9,12 @@ const initialState = {
         url: "",
         icon: "",
         name: ""
+    },
+    favouriteEmote: {
+        url: "",
+        path: "",
+        emoteName: "",
+        emoteType: ""
     }
 }
 
@@ -28,10 +34,18 @@ const contextMenuSlice = createSlice({
             state.repo.url = url;
             state.repo.icon = icon;
             state.repo.name = name
+        },
+        selectedFavouriteEmote: (state, action) => {
+            const { url, name, type, path } = action.payload;
+
+            state.favouriteEmote.url = url;
+            state.favouriteEmote.path = path;
+            state.favouriteEmote.emoteName = name;
+            state.favouriteEmote.emoteType = type;
         }
     }
 });
 
-export const { selectedEmote, selectedRepoContext } = contextMenuSlice.actions;
+export const { selectedEmote, selectedRepoContext, selectedFavouriteEmote } = contextMenuSlice.actions;
 
 export default contextMenuSlice.reducer

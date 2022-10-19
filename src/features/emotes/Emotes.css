@@ -222,7 +222,7 @@
 
 .favouriteEmotesContainer {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 1rem;
     max-height: calc(100vh - 530px);
 }
@@ -259,6 +259,10 @@
     margin-left: -1rem;
 }
 
+.favsss {
+    width: 100%;
+}
+
 @media only screen and (max-width: 1200px) {
     .Home .urlContent .AboutContainer {
         margin-left: -2rem;
@@ -289,11 +293,11 @@
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 
-    .frequentlyUsedEmotes .favouriteEmotesContainer {
+    .frequentlyUsedEmotes .frequentlyUsedEmotesContainer {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 
-    .Home .favouriteEmotesContainer {
+    .favouriteEmotesContainer {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 }
@@ -311,7 +315,7 @@
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 
-    .Home .favouriteEmotesContainer {
+    .favouriteEmotesContainer {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     }
 }
@@ -456,7 +460,7 @@
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     }
 
-    .Home .favouriteEmotesContainer {
+    .favouriteEmotesContainer {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     }
 
@@ -474,7 +478,7 @@
         grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 
-    .Home .favouriteEmotesContainer {
+    .favouriteEmotesContainer {
         grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }

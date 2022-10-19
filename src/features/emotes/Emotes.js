@@ -14,7 +14,6 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
     const allRepos = useSelector(state => state.repos.allRepos);
     const url = useSelector(state => state.emotes.url);
     const urlData = useSelector(state => state.emotes.urlData);
-    const favourites = useSelector(state => state.emotes.favourites);
     const frequentlyUsed = useSelector(state => state.repos.frequentlyUsed);
     const [isDownloadsActive, setIsDownloadsActive] = useState(false);
     const [isAboutActive, setIsAboutActive] = useState(false);
@@ -110,17 +109,16 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                                         }
                                 </div>
                             </div>
-                            
                             {
                                 allRepos.map((repo, index) => {
-                                    return repo.favourites && repo.favourites.length > 0 ? (
+                                    return repo.favourites && repo.favourites.length > 0 && Object.keys(repo.data).length > 0 ? (
                                         <div key={index} className='favouriteEmotes'>
                                             <h1><i className="fa fa-star"></i> {repo.data.name}'s Favourite Emotes</h1>
                                             <div className='favouriteEmotesContainer'>
                                                 {
                                                     repo.favourites.map((emote, indexx) => {
                                                         return (
-                                                            <div key={index + indexx} id={repo.url} className='emoteContainer' {...longPressProps} >
+                                                            <div key={index + indexx} id={repo.url} className='emoteContainer favouriteEmotesEmoteContainer' {...longPressProps} >
                                                                 <div className='emoteImageContainer'>
                                                                     <ReactSquircle imageUrl={repo.data.path !== '' ? repo.url + '/' + repo.data.path + '/' + emote.name + '.' + emote.type : repo.url + '/' + emote.name + '.' + emote.type} alt={emote.name} width={48} height={48} />
                                                                 </div>
@@ -151,9 +149,9 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                                     <i className='fa fa-github'></i>
                                     <span>Github </span>
                                 </div>
-                                <div className='socials Link' onClick={(e) => window.location.href = "https://nitroless.github.io/"}>
+                                <div className='socials Link' onClick={(e) => window.location.href = "https://github.com/Nitroless/nitroless.github.io"}>
                                     <i className='fa fa-link'></i>
-                                    <span>Website </span>
+                                    <span>Source Code</span>
                                 </div>
                                 <div className='socials Twitter' onClick={(e) => window.location.href = "https://twitter.com/nitroless_"}>
                                     <i className='fa fa-twitter'></i>
@@ -329,7 +327,7 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                                     title: urlData.name,
                                     text: `Checkout the awesome Nitroless Repo - ${urlData.name} ${url}`,
                                 })
-                                .then(() => console.log('Shared Successfully'))
+                                .then(() => {return})
                                 .catch((err) => console.error('DEBUG', err));
                             } else {
                                 window.navigator.clipboard.writeText(`Checkout the awesome Nitroless Repo - ${urlData.name} ${url}`);
@@ -357,14 +355,14 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                         }
                         </div>
                     </div>
-                    {favourites && favourites.length > 0 ? (
-                        <div className='favouriteEmotes'>
+                    {allRepos.filter((repo) => repo.url === url)[0].favourites && allRepos.filter((repo) => repo.url === url)[0].favourites.length > 0 ? (
+                        <div className='favouriteEmotes favsss'>
                             <h1><i className="fa fa-star"></i> Favourite Emotes</h1>
                             <div className='favouriteEmotesContainer'>
                             {
-                                favourites.map((emote, index) => {
+                                allRepos.filter((repo) => repo.url === url)[0].favourites.map((emote, index) => {
                                     return (
-                                        <div key={index} id={url} className='emoteContainer' {...longPressProps} >
+                                        <div key={index} id={url} className='emoteContainer favouriteEmotesEmoteContainer' {...longPressProps} >
                                             <div className='emoteImageContainer'>
                                                 <ReactSquircle imageUrl={urlData.path !== '' ? url + urlData.path + '/' + emote.name + '.' + emote.type : url + emote.name + '.' + emote.type} alt={emote.name} width={48} height={48} />
                                             </div>
