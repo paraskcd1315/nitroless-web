@@ -7,7 +7,7 @@ import './Emotes.css'
 import useWindowDimensions from '../../customHooks/WindowDimensions/useWindowDimensions';
 import { addToFrequentlyUsed, removeRepository, setInactiveAllRepositories } from '../repos/reposSlice';
 import useLongPress from '../../customHooks/LongPress/useLongPress';
-import { selectedEmote } from '../contextMenu/contextMenuSlice';
+import { selectedEmote, selectedFavouriteEmote } from '../contextMenu/contextMenuSlice';
 
 const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActive }) => {
     const { width } = useWindowDimensions();
@@ -37,6 +37,16 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                 let emote = emoteURL[emoteURL.length - 1].split('.');
                 dispatch(selectedEmote({
                     name: emote[0], type: emote[1]
+                }));
+                setContextMenuActive(true);
+            }
+
+            if(iOS && webkit && !userAgent.match(/CriOS/i) && e.target.className.includes("favouriteEmotesEmoteContainer")) {
+                dispatch(selectedFavouriteEmote({
+                    url: e.target.id,
+                    path: allRepos.filter((rep) => rep.url === e.target.id)[0].data.path,
+                    name: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
+                    type: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
                 }));
                 setContextMenuActive(true);
             }

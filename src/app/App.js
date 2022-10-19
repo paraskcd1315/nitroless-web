@@ -42,7 +42,7 @@ function App() {
             path: allRepos.filter((rep) => rep.url === e.target.id)[0].data.path,
             name: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
             type: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
-          }))
+          }));
         }
 
         setContextMenuActive(true);
@@ -54,7 +54,12 @@ function App() {
   }, [dispatch, allRepos]);
 
   return (
-      <div className='App'>
+      <div className='App' onClick={(e) => {
+        e.preventDefault()
+        if(openSidebar) {
+          setOpenSidebar(false);
+        }
+      }}>
         {
         
         isLoading ?
