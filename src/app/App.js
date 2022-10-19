@@ -6,6 +6,7 @@ import { selectedEmote, selectedFavouriteEmote, selectedRepoContext } from '../f
 
 import Emotes from '../features/emotes/Emotes';
 import Repos from '../features/repos/Repos';
+import { areObjectsEqual } from '../utils/objectsEqual';
 import './App.css';
 
 function App() {
@@ -20,11 +21,21 @@ function App() {
     const contextMenuEventHandler = (e) => {
         e.preventDefault();
         if(e.target.className === 'emoteContainer' && e.target.parentNode.className === "emotesContainer") {
+            const repo = allRepos.filter((rep) => rep.url === e.target.id)[0];
             let emoteURL = e.target.lastChild.lastChild.lastChild.src.split('/')
             let emote = emoteURL[emoteURL.length - 1].split('.');
-            dispatch(selectedEmote({
-              name: emote[0], type: emote[1]
-            }));
+            if(repo.favourites.filter((fav) => areObjectsEqual(fav, {name: emote[0], type: emote[1]})).length > 0) {
+              dispatch(selectedFavouriteEmote({
+                url: e.target.id,
+                path: allRepos.filter((rep) => rep.url === e.target.id)[0].data.path,
+                name: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
+                type: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
+              }));
+            } else {
+              dispatch(selectedEmote({
+                name: emote[0], type: emote[1]
+              }));
+            }
         }
 
         if(e.target.className.includes("repo")) {
