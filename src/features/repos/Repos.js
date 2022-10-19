@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import './Repos.css';
 import logo from '../../assets/images/logo/index.png';
 import { selectedRepo } from '../emotes/emotesSlice';
+import useLongPress from '../../customHooks/LongPress/useLongPress';
+import { selectedRepoContext } from '../contextMenu/contextMenuSlice';
 
-const Repos = ({ openSidebar, homeActive, setHomeActive, setIsLoading, isLoading }) => {
+const Repos = ({ openSidebar, homeActive, setHomeActive, setIsLoading, isLoading, setContextMenuActive }) => {
     const allRepos = useSelector((state) => state.repos.allRepos);
     const dispatch = useDispatch();
 
@@ -25,12 +27,36 @@ const Repos = ({ openSidebar, homeActive, setHomeActive, setIsLoading, isLoading
     // eslint-disable-next-line
     }, [dispatch]);
 
+    const longPressProps = useLongPress({
+        onClick: (e) => {
+            const repo = allRepos.filter((rep) => rep.url === e.target.id)[0];
+
+            dispatch(selectedRepo({ url: repo.url, urlData: repo.data, favourites: repo.favourites, active: true }));
+            setHomeActive(false);
+            dispatch(setActiveRepository({url: repo.url}));
+        },
+        onLongPress: (e) => {
+            const userAgent = window.navigator.userAgent;
+            const iOS = !!userAgent.match(/iPad/i) || !!userAgent.match(/iPhone/i);
+            const webkit = !!userAgent.match(/WebKit/i);
+            if(iOS && webkit && !userAgent.match(/CriOS/i) && e.target.className.includes("repo")) {
+                const repo = allRepos.filter((rep) => rep.url === e.target.id)[0];
+                dispatch(selectedRepoContext({
+                    url: repo.url,
+                    icon: repo.data.icon,
+                    name: repo.data.name
+                }));
+                setContextMenuActive(true);
+            }
+        },
+    });
+
     return isLoading ?
-    <div className={`Repos${openSidebar ? ' sidebarOpened' : ''}`}>
+    <div  className={`Repos${openSidebar ? ' sidebarOpened' : ''}`}>
         <div className={`repo${homeActive ? ' active' : ''}`} onClick={(e) => {
                     e.preventDefault();
 
-                    dispatch(selectedRepo({ url: '', urlData: {} }));
+                    dispatch(selectedRepo({ url: '', urlData: {}, active: false, favourites: [] }));
                     setHomeActive(true);
                     dispatch(setInactiveAllRepositories());
                 }}>
@@ -67,7 +93,7 @@ const Repos = ({ openSidebar, homeActive, setHomeActive, setIsLoading, isLoading
         <div className={`repo${homeActive ? ' active' : ''}`} onClick={(e) => {
                     e.preventDefault();
 
-                    dispatch(selectedRepo({ url: '', urlData: {} }));
+                    dispatch(selectedRepo({ url: '', urlData: {}, active: false, favourites: [] }));
                     setHomeActive(true);
                     dispatch(setInactiveAllRepositories());
                 }}>
@@ -82,13 +108,7 @@ const Repos = ({ openSidebar, homeActive, setHomeActive, setIsLoading, isLoading
         </div>
         {allRepos.map((repo, index) => {
             return (
-                <div key={index} className={`repo${repo.active ? ' active' : ''}`} onClick={(e) => {
-                    e.preventDefault();
-
-                    dispatch(selectedRepo({ url: repo.url, urlData: repo.data, favourites: repo.favourites }));
-                    setHomeActive(false);
-                    dispatch(setActiveRepository({url: repo.url}));
-                }}>
+                <div key={index} id={repo.url} className={`repo${repo.active ? ' active' : ''}`} {...longPressProps}>
                     <div className='pill'>
                         <span className='item'></span>
                     </div>

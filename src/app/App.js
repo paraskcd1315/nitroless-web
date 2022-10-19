@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import { ColorRing } from 'react-loader-spinner';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ContextMenu from '../features/contextMenu/ContextMenu';
-import { selectedEmote } from '../features/contextMenu/contextMenuSlice';
+import { selectedEmote, selectedRepoContext } from '../features/contextMenu/contextMenuSlice';
 
 import Emotes from '../features/emotes/Emotes';
 import Repos from '../features/repos/Repos';
 import './App.css';
 
 function App() {
+  const allRepos = useSelector(state => state.repos.allRepos); 
   const dispatch = useDispatch();
   const [ openSidebar, setOpenSidebar ] = useState(false);
   const [ homeActive, setHomeActive ] = useState(true);
@@ -24,14 +25,24 @@ function App() {
             dispatch(selectedEmote({
               name: emote[0], type: emote[1]
             }));
-            setContextMenuActive(true);
         }
+
+        if(e.target.className.includes("repo")) {
+          const repo = allRepos.filter((rep) => rep.url === e.target.id)[0];
+          dispatch(selectedRepoContext({
+            url: repo.url,
+            icon: repo.data.icon,
+            name: repo.data.name
+          }));
+        }
+
+        setContextMenuActive(true);
     };
 
     document.addEventListener('contextmenu', contextMenuEventHandler);
 
     return () => document.removeEventListener('contextmenu', contextMenuEventHandler)
-  }, [dispatch]);
+  }, [dispatch, allRepos]);
 
   return (
       <div className='App'>
@@ -59,7 +70,7 @@ function App() {
         }
 
         <div className='sidebar'>   
-          <Repos openSidebar={openSidebar} homeActive={homeActive} setHomeActive={setHomeActive} isLoading={isLoading} setIsLoading={setIsLoading} />
+          <Repos openSidebar={openSidebar} homeActive={homeActive} setHomeActive={setHomeActive} isLoading={isLoading} setIsLoading={setIsLoading} setContextMenuActive={setContextMenuActive} />
         </div>
         <div className='mainContent'>
           <Emotes openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} setHomeActive={setHomeActive} setContextMenuActive={setContextMenuActive} isLoading={isLoading} />

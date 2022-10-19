@@ -4,6 +4,11 @@ const initialState = {
     emote: {
         name: "",
         type: ""
+    },
+    repo: {
+        url: "",
+        icon: "",
+        name: ""
     }
 }
 
@@ -16,10 +21,17 @@ const contextMenuSlice = createSlice({
 
             state.emote.name = name;
             state.emote.type = type;
+        },
+        selectedRepoContext: (state, action) => {
+            const { url, icon, name } = action.payload;
+
+            state.repo.url = url;
+            state.repo.icon = icon;
+            state.repo.name = name
         }
     }
 });
 
-export const { selectedEmote } = contextMenuSlice.actions;
+export const { selectedEmote, selectedRepoContext } = contextMenuSlice.actions;
 
 export default contextMenuSlice.reducer

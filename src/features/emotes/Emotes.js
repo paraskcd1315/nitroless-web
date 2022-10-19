@@ -26,17 +26,14 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
     const longPressProps = useLongPress({
         onClick: (e) => {
             const copyText = e.target.lastChild.lastChild.lastChild.src;
-            window.navigator.clipboard.writeText(copyText);
+            setTimeout(async () => await window.navigator.clipboard.writeText(copyText))
             dispatch(addToFrequentlyUsed(copyText))
         },
         onLongPress: (e) => {
-            if(e.target.parentNode !== "frequentlyUsedEmotesContainer") {
-                return;
-            }
             const userAgent = window.navigator.userAgent;
             const iOS = !!userAgent.match(/iPad/i) || !!userAgent.match(/iPhone/i);
             const webkit = !!userAgent.match(/WebKit/i);
-            if(iOS && webkit && !userAgent.match(/CriOS/i)) {
+            if(iOS && webkit && !userAgent.match(/CriOS/i) && e.target.className === 'emoteContainer' && e.target.parentNode.className === "emotesContainer") {
                 let emoteURL = e.target.lastChild.lastChild.lastChild.src.split('/')
                 let emote = emoteURL[emoteURL.length - 1].split('.');
                 dispatch(selectedEmote({
@@ -45,7 +42,7 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                 setContextMenuActive(true);
             }
         },
-      });
+    });
     
     const dispatch = useDispatch();
 
