@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { fetchRepoData } from "./reposAPI";
-import { areObjectsEqual } from "../../utils/objectsEqual";
 import axios from "axios";
 
 axios.get("https://nitroless.github.io/default.json").then((res) => {
@@ -93,12 +92,8 @@ const reposSlice = createSlice({
         },
         addToFrequentlyUsed: (state, action) => {
             if(state.frequentlyUsed.length > 0) {
-                if(state.frequentlyUsed.filter((freq) => {
-                    return areObjectsEqual(freq, action.payload)
-                }).length > 0) {
-                    state.frequentlyUsed = state.frequentlyUsed.filter((freq) => {
-                        return !areObjectsEqual(freq, action.payload)
-                    });
+                if(state.frequentlyUsed.filter((freq) => freq === action.payload).length > 0) {
+                    state.frequentlyUsed = state.frequentlyUsed.filter((freq) => freq !== action.payload);
                 } 
 
                 state.frequentlyUsed.unshift(action.payload);

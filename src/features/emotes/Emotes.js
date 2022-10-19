@@ -27,18 +27,12 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
         onClick: (e) => {
             const copyText = e.target.lastChild.lastChild.lastChild.src;
             window.navigator.clipboard.writeText(copyText);
-            let emoteURL = copyText.split('/')
-            console.log(emoteURL)
-            let emote = emoteURL[emoteURL.length - 1].split('.');
-            dispatch(addToFrequentlyUsed({
-                url: `${emoteURL[0]}//${emoteURL[2]}`,
-                path: copyText.split('/')[3].includes(".") ? "" : emoteURL[3],
-                emote: {
-                    name: emote[0], type: emote[1]
-                }
-            }))
+            dispatch(addToFrequentlyUsed(copyText))
         },
         onLongPress: (e) => {
+            if(e.target.parentNode !== "frequentlyUsedEmotesContainer") {
+                return;
+            }
             const userAgent = window.navigator.userAgent;
             const iOS = !!userAgent.match(/iPad/i) || !!userAgent.match(/iPhone/i);
             const webkit = !!userAgent.match(/WebKit/i);
@@ -109,9 +103,9 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                                         {
                                             frequentlyUsed.length > 0 ? frequentlyUsed.map((emote, index) => {
                                                 return (
-                                                    <div key={index} id={emote.url} className='emoteContainer' {...longPressProps} >
+                                                    <div key={index} id={emote} className='emoteContainer' {...longPressProps} >
                                                         <div className='emoteImageContainer'>
-                                                            <ReactSquircle imageUrl={emote.path !== '' ? emote.url + '/' + emote.path + '/' + emote.emote.name + '.' + emote.emote.type : emote.url + '/' + emote.emote.name + '.' + emote.emote.type} alt={emote.emote.name} width={48} height={48} />
+                                                            <ReactSquircle imageUrl={emote} alt={emote.split('/')[emote.split('/').length - 1].split('.')[0]} width={48} height={48} />
                                                         </div>
                                                     </div>
                                                 )
@@ -356,7 +350,7 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
                         {
                             urlData.emotes.map((emote, index) => {
                                 return (
-                                    <div key={index} id={url} className='emoteContainer' {...longPressProps} >
+                                    <div key={index} id={url} urlPath={urlData.path} className='emoteContainer' {...longPressProps} >
                                         <div className='emoteImageContainer'>
                                             <ReactSquircle imageUrl={urlData.path !== '' ? url + urlData.path + '/' + emote.name + '.' + emote.type : url + emote.name + '.' + emote.type} alt={emote.name} width={48} height={48} />
                                         </div>

@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     const contextMenuEventHandler = (e) => {
         e.preventDefault();
-        if(e.target.className === 'emoteContainer') {
+        if(e.target.className === 'emoteContainer' && e.target.parentNode.className === "emotesContainer") {
             let emoteURL = e.target.lastChild.lastChild.lastChild.src.split('/')
             let emote = emoteURL[emoteURL.length - 1].split('.');
             dispatch(selectedEmote({

@@ -218,7 +218,6 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 1rem;
     max-height: calc(100vh - 530px);
-    overflow: hidden auto;
 }
 
 .favouriteEmotesContainer {
@@ -226,7 +225,6 @@
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 1rem;
     max-height: calc(100vh - 530px);
-    overflow: hidden auto;
 }
 
 .emotesContainer{

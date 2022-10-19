@@ -5,23 +5,24 @@ import './ContextMenu.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { addEmoteToFavourites } from '../repos/reposSlice';
 import { updateFavourites } from '../emotes/emotesSlice';
+import { selectedEmote } from './contextMenuSlice';
 
 const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
     const selectedRepo = useSelector(state => state.emotes);
-    const selectedEmote = useSelector(state => state.contextMenu.emote);
+    const selEmote = useSelector(state => state.contextMenu.emote);
     const dispatch = useDispatch();
     
     return (
-        <div className={`contextMenu${contextmenuActive && selectedEmote.name !== '' ? ' active' : ''}`}>
+        <div className={`contextMenu${contextmenuActive && selEmote.name !== '' ? ' active' : ''}`}>
             <div className='contextMenuContainer'>
                 <div className='emoteContainer'>
-                    <ReactSquircle imageUrl={selectedRepo.urlData.path !== '' ? selectedRepo.url + selectedRepo.urlData.path + '/' + selectedEmote.name + '.' + selectedEmote.type : selectedRepo.url + selectedEmote.name + '.' + selectedEmote.type} alt={selectedEmote.name} width={48} height={48} />
-                    <h2 className='emoteName'>{selectedEmote.name}</h2>
+                    <ReactSquircle imageUrl={selectedRepo.urlData.path !== '' ? selectedRepo.url + selectedRepo.urlData.path + '/' + selEmote.name + '.' + selEmote.type : selectedRepo.url + selEmote.name + '.' + selEmote.type} alt={selEmote.name} width={48} height={48} />
+                    <h2 className='emoteName'>{selEmote.name}</h2>
                 </div>
                 <div className='contextMenuOptions'>
                     <div className='option' onClick={(e) => {
                         e.preventDefault();
-                        window.navigator.clipboard.writeText(selectedRepo.urlData.path !== '' ? selectedRepo.url + selectedRepo.urlData.path + '/' + selectedEmote.name + '.' + selectedEmote.type : selectedRepo.url + selectedEmote.name + '.' + selectedEmote.type);
+                        window.navigator.clipboard.writeText(selectedRepo.urlData.path !== '' ? selectedRepo.url + selectedRepo.urlData.path + '/' + selEmote.name + '.' + selEmote.type : selectedRepo.url + selEmote.name + '.' + selEmote.type);
                     }}><i className="fa fa-copy"></i> Copy</div>
                     <div className='option' onClick={(e) => {
                         e.preventDefault();
@@ -29,11 +30,11 @@ const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
                         dispatch(addEmoteToFavourites({
                             url: selectedRepo.url,
                             emote: {
-                                name: selectedEmote.name,
-                                type: selectedEmote.type
+                                name: selEmote.name,
+                                type: selEmote.type
                             }
                         }));
-                        dispatch(updateFavourites({name: selectedEmote.name, type: selectedEmote.type}));
+                        dispatch(updateFavourites({name: selEmote.name, type: selEmote.type}));
                     }}><i className="fa fa-star"></i> Add to Favourites</div>
                     <div className='option' onClick={(e) => {
                         setContextMenuActive(false);
