@@ -8,9 +8,12 @@ import './Emotes.css'
 import useWindowDimensions from '../../customHooks/WindowDimensions/useWindowDimensions';
 import useLongPress from '../../customHooks/LongPress/useLongPress';
 import logo from '../../assets/images/logo/firstLetter.png'; 
+import logoLight from '../../assets/images/logo/firstLetterLight.png'
 import appStore from '../../assets/images/downloadBranding/AppStore.svg'; 
+import useThemeDetector from '../../customHooks/ThemeDetector/useThemeDetector';
 
-const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActive }) => {
+const Emotes = ({ openSidebar, setOpenSidebar, setContextMenuActive }) => {
+  const isDarkTheme = useThemeDetector();
   const { width } = useWindowDimensions();
   const allRepos = useSelector(state => state.repos.allRepos);
   const isRepoSelected = useSelector(state => state.emotes.active);
@@ -89,7 +92,7 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
         }
         
         <div className="logo">
-          <img src={logo} alt="N" />ITROLESS
+          <img src={isDarkTheme ? logo : logoLight} alt="N" />ITROLESS
         </div>
         <div className="empty"></div>
       </div>
