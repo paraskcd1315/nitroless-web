@@ -92,7 +92,7 @@ const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActi
         }
         
         <div className="logo">
-          <img src={isDarkTheme ? logo : logoLight} alt="N" />ITROLESS
+          <img src={isDarkTheme ? logo : logoLight} alt="N" />{width > 336 ? "ITROLESS" : ""}
         </div>
         <div className="empty"></div>
       </div>
