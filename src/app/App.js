@@ -20,20 +20,21 @@ function App() {
   useEffect(() => {
     const contextMenuEventHandler = (e) => {
         e.preventDefault();
-        if(e.target.className === 'emoteContainer' && e.target.parentNode.className === "emotesContainer") {
+        if(e.target.className === 'emoteContainer' && e.target.parentNode.className.includes("emotesContainer")) {
             const repo = allRepos.filter((rep) => rep.url === e.target.id)[0];
-            let emoteURL = e.target.lastChild.lastChild.lastChild.src.split('/')
+            let emoteURL = e.target.lastChild.lastChild.src.split('/')
             let emote = emoteURL[emoteURL.length - 1].split('.');
             if(repo.favourites && repo.favourites.filter((fav) => areObjectsEqual(fav, {name: emote[0], type: emote[1]})).length > 0) {
               dispatch(selectedFavouriteEmote({
+                active: true,
                 url: e.target.id,
                 path: allRepos.filter((rep) => rep.url === e.target.id)[0].data.path,
-                name: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
-                type: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
+                name: e.target.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
+                type: e.target.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
               }));
             } else {
               dispatch(selectedEmote({
-                name: emote[0], type: emote[1]
+                active: true, name: emote[0], type: emote[1]
               }));
             }
         }
@@ -41,6 +42,7 @@ function App() {
         if(e.target.className.includes("repo")) {
           const repo = allRepos.filter((rep) => rep.url === e.target.id)[0];
           dispatch(selectedRepoContext({
+            active: true,
             url: repo.url,
             icon: repo.data.icon,
             name: repo.data.name
@@ -49,10 +51,11 @@ function App() {
 
         if(e.target.className.includes("favouriteEmotesEmoteContainer")) {
           dispatch(selectedFavouriteEmote({
+            active: true,
             url: e.target.id,
             path: allRepos.filter((rep) => rep.url === e.target.id)[0].data.path,
-            name: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
-            type: e.target.lastChild.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
+            name: e.target.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
+            type: e.target.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
           }));
         }
 
@@ -91,13 +94,10 @@ function App() {
             /> 
           </div>
         : ""
-        
         }
 
-        <div className='sidebar'>   
-          <Repos openSidebar={openSidebar} homeActive={homeActive} setHomeActive={setHomeActive} isLoading={isLoading} setIsLoading={setIsLoading} setContextMenuActive={setContextMenuActive} />
-        </div>
-        <div className='mainContent'>
+        <Repos openSidebar={openSidebar} homeActive={homeActive} setHomeActive={setHomeActive} isLoading={isLoading} setIsLoading={setIsLoading} setContextMenuActive={setContextMenuActive} />
+        <div className={`mainContainer${openSidebar ? " openSidebar" : ""}`}>
           <Emotes openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} setHomeActive={setHomeActive} setContextMenuActive={setContextMenuActive} isLoading={isLoading} />
           <ContextMenu contextmenuActive={contextmenuActive} setContextMenuActive={setContextMenuActive} />
         </div>

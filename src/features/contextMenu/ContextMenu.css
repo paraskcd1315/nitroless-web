@@ -55,6 +55,22 @@
     color: #fff;
 }
 
+.contextMenuContainer .emoteContainer .emoteImageContainer {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.contextMenuContainer .emoteContainer .emoteImageContainer img {
+    width: 60px;
+    height: 60px;
+    background-color: var(--background-secondary-color);
+    border-radius: 1rem;
+}
+
 .contextMenuContainer .contextMenuOptions {
     display: flex;
     flex-direction: column;

@@ -23,7 +23,7 @@ const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
             <div className='contextMenuContainer'>
                 <div className='emoteContainer'>
                     <div className="emoteImageContainer">
-                        <ReactSquircle imageUrl={selectedRepo.urlData.path !== '' ? selectedRepo.url + selectedRepo.urlData.path + '/' + selEmote.name + '.' + selEmote.type : selectedRepo.url + selEmote.name + '.' + selEmote.type} alt={selEmote.name} width={48} height={48} />
+                        <img src={selectedRepo.urlData.path !== '' ? selectedRepo.url + selectedRepo.urlData.path + '/' + selEmote.name + '.' + selEmote.type : selectedRepo.url + selEmote.name + '.' + selEmote.type} alt={selEmote.name} />
                     </div>
                     <h2 className='emoteName'>{selEmote.name}</h2>
                 </div>
@@ -32,10 +32,10 @@ const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
                         e.preventDefault();
                         setTimeout(async () => await window.navigator.clipboard.writeText(selectedRepo.urlData.path !== '' ? selectedRepo.url + selectedRepo.urlData.path + '/' + selEmote.name + '.' + selEmote.type : selectedRepo.url + selEmote.name + '.' + selEmote.type));
                         setTimeout(() => dispatch(selectedEmote({
-                            name: "", type: ""
+                            active: false, name: "", type: ""
                         })), 250);
                     }}><i className="fa fa-copy"></i> Copy</div>
-                    <div className='option' onClick={(e) => {
+                    {/* <div className='option' onClick={(e) => {
                         e.preventDefault();
                         setContextMenuActive(false);
                         dispatch(addEmoteToFavourites({
@@ -47,16 +47,16 @@ const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
                         }));
                         setTimeout(() => {
                             dispatch(selectedEmote({
-                                name: "", type: ""
+                                active: false, name: "", type: ""
                             }));
                             const repo = allRepos.filter(repo => repo.url === selFavouriteEmote.url)[0];
                             dispatch(updateFavourites(repo.favourites));
                         }, 250);
-                    }}><i className="fa fa-star"></i> Add to Favourites</div>
+                    }}><i className="fa fa-star"></i> Add to Favourites</div> */}
                     <div className='option' onClick={(e) => {
                         setContextMenuActive(false);
                         setTimeout(() => dispatch(selectedEmote({
-                            name: "", type: ""
+                            active: false, name: "", type: ""
                         })), 250);
                     }}><i className="fa fa-close"></i> Cancel</div>
                 </div>
@@ -71,7 +71,7 @@ const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
             <div className="contextMenuContainer">
                 <div className="emoteContainer">
                     <div className="emoteImageContainer">
-                        <ReactSquircle imageUrl={selRepo.url + '/' + selRepo.icon} width={64} height={64}/>
+                        <img src={selRepo.url + '/' + selRepo.icon} alt={selRepo.name} />
                     </div>
                     <h2 className="emoteName">{selRepo.name}</h2>
                 </div>
@@ -88,7 +88,7 @@ const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
                     <div className='option' onClick={(e) => {
                         setContextMenuActive(false);
                         setTimeout(() => dispatch(selectedRepoContext({
-                            name: "", url: "", icon: ""
+                            active: false, name: "", url: "", icon: ""
                         })), 250);
                     }}><i className="fa fa-close"></i> Cancel</div>
                 </div>
@@ -103,7 +103,7 @@ const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
             <div className='contextMenuContainer'>
                 <div className='emoteContainer'>
                     <div className="emoteImageContainer">
-                        <ReactSquircle imageUrl={selFavouriteEmote.path !== '' ? selFavouriteEmote.url + '/' + selFavouriteEmote.path + '/' + selFavouriteEmote.emoteName + '.' + selFavouriteEmote.emoteType : selFavouriteEmote.url + '/' + selFavouriteEmote.emoteName + '.' + selFavouriteEmote.emoteType} alt={selFavouriteEmote.emoteName} width={48} height={48} />
+                        <img src={selFavouriteEmote.path !== '' ? selFavouriteEmote.url + '/' + selFavouriteEmote.path + '/' + selFavouriteEmote.emoteName + '.' + selFavouriteEmote.emoteType : selFavouriteEmote.url + '/' + selFavouriteEmote.emoteName + '.' + selFavouriteEmote.emoteType} alt={selFavouriteEmote.emoteName} />
                     </div>
                     <h2 className='emoteName'>{selFavouriteEmote.emoteName}</h2>
                 </div>
@@ -112,7 +112,7 @@ const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
                         e.preventDefault();
                         setTimeout(async () => await window.navigator.clipboard.writeText(selFavouriteEmote.path !== '' ? selFavouriteEmote.url + '/' + selFavouriteEmote.path + '/' + selFavouriteEmote.emoteName + '.' + selFavouriteEmote.emoteType : selFavouriteEmote.url + '/' + selFavouriteEmote.emoteName + '.' + selFavouriteEmote.emoteType));
                         setTimeout(() => dispatch(selectedFavouriteEmote({
-                            name: "", type: "", url: "", path: ""
+                            active: false, name: "", type: "", url: "", path: ""
                         })), 250);
                     }}><i className="fa fa-copy"></i> Copy</div>
                     <div className='option' onClick={(e) => {
@@ -129,14 +129,14 @@ const ContextMenu = ({ contextmenuActive, setContextMenuActive }) => {
                             const repo = allRepos.filter(repo => repo.url === selFavouriteEmote.url)[0];
                             dispatch(updateFavourites(repo.favourites));
                             dispatch(selectedFavouriteEmote({
-                                name: "", type: "", url: "", path: ""
+                                active: false, name: "", type: "", url: "", path: ""
                             }));
                         }, 250);
                     }}><i className="fa fa-star"></i> Remove from Favourites</div>
                     <div className='option' onClick={(e) => {
                         setContextMenuActive(false);
                         setTimeout(() => dispatch(selectedFavouriteEmote({
-                            name: "", type: "", url: "", path: ""
+                            active: false, name: "", type: "", url: "", path: ""
                         })), 250);
                     }}><i className="fa fa-close"></i> Cancel</div>
                 </div>

@@ -7,6 +7,12 @@
 }
 @font-face {
   font-family: 'Uni Sans';
+  src: url('./assets/fonts/uni-sans/Uni\ Sans\ Heavy\ Italic.otf');
+  font-weight: 800;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Uni Sans';
   src: url('./assets/fonts/uni-sans/Uni\ Sans\ Thin.otf');
   font-weight: 200;
 }
@@ -20,18 +26,8 @@
   --background-color: #FFFFFF;
   --background-secondary-color: #E3E4E8;
   --background-tertiary-color: #DCDDE1;
-  --boxShadow: 0 1px 2px rgba(0,0,0,0.07), 
-                0 2px 4px rgba(0,0,0,0.07), 
-                0 4px 8px rgba(0,0,0,0.07), 
-                0 8px 16px rgba(0,0,0,0.07),
-                0 16px 32px rgba(0,0,0,0.07), 
-                0 32px 64px rgba(0,0,0,0.07);
-  --boxShadowHorizontal: 1px 0 2px rgba(0,0,0,0.07), 
-              2px 0 4px rgba(0,0,0,0.07), 
-              4px 0 8px rgba(0,0,0,0.07), 
-              8px 0 16px rgba(0,0,0,0.07),
-              16px 0 32px rgba(0,0,0,0.07), 
-              32px 0 64px rgba(0,0,0,0.07);
+  --width: 512px;
+  --margin-left: 72px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -62,4 +58,49 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@media only screen and (max-width: 635px) {
+  :root {
+    --width: 390px;
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  :root {
+    --margin-left: 0px
+  }
+  
+  .mainContainer {
+    background-color: var(--background-color);
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    z-index: 99;
+    overflow-y: auto;
+    transform: translateX(0);
+    transition: all 0.2s ease;
+  }
+
+  .mainContainer.openSidebar {
+    transform: translateX(72px);
+  }
+
+  .logoContainer {
+    font-size: 53px;
+  }
+
+  .logoContainer .header .logo img {
+    width: 46px;
+  }
+
+  .logoContainer .header {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 445px) {
+  :root {
+    --width: 325px;
+  }
 }
