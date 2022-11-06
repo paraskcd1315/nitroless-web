@@ -3,7 +3,7 @@ import { fetchRepoData } from "./reposAPI";
 import axios from "axios";
 import { areObjectsEqual } from "../../utils/objectsEqual";
 
-axios.get("https://nitroless.github.io/default.json").then((res) => {
+axios.get("https://nitroless.app/default.json").then((res) => {
     if (JSON.parse(localStorage.getItem('repos')) && JSON.parse(localStorage.getItem('repos')).length > 0) {
         return
     } else {
