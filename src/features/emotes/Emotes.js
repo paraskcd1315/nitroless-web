@@ -12,7 +12,7 @@ import logoLight from '../../assets/images/logo/firstLetterLight.png'
 import appStore from '../../assets/images/downloadBranding/AppStore.svg'; 
 import useThemeDetector from '../../customHooks/ThemeDetector/useThemeDetector';
 
-const Emotes = ({ openSidebar, setOpenSidebar, setContextMenuActive }) => {
+const Emotes = ({ openSidebar, setOpenSidebar, setHomeActive, setContextMenuActive }) => {
   const isDarkTheme = useThemeDetector();
   const { width } = useWindowDimensions();
   const allRepos = useSelector(state => state.repos.allRepos);
@@ -127,10 +127,27 @@ const Emotes = ({ openSidebar, setOpenSidebar, setContextMenuActive }) => {
           </div>)
         :
           (<div className='repoButtons'>
-            <button className="btn">
+            <button className="btn" onClick={(e) => {
+              e.preventDefault();
+              if(window.navigator.share && width <= 560) {
+                window.navigator.share({
+                    title: urlData.name,
+                    text: `Checkout the awesome Nitroless Repo - ${urlData.name} ${url}`,
+                })
+                .then(() => {return})
+                .catch((err) => console.error('DEBUG', err));
+              } else {
+                window.navigator.clipboard.writeText(`Checkout the awesome Nitroless Repo - ${urlData.name} ${url}`);
+              }
+            }}>
               <i className="fa fa-share-square-o"></i> Share
             </button>
-            <button className="btn danger">
+            <button className="btn danger" onClick={(e) => {
+              e.preventDefault();
+              dispatch(removeRepository(url));
+              dispatch(setInactiveAllRepositories());
+              setHomeActive(true);
+            }}>
               <i className="fa fa-trash"></i> Remove
             </button>
           </div>)

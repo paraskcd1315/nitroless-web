@@ -78,6 +78,7 @@ code {
     position: relative;
     z-index: 99;
     overflow-y: auto;
+    padding-bottom: 2rem;
     transform: translateX(0);
     transition: all 0.2s ease;
   }
