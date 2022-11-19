@@ -1,0 +1,39 @@
+.sidebar {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 72px;
+    height: calc(100vh - 6rem);
+    padding-top: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: var(--backgroundTertiaryColor);
+    margin: 2.4rem 0;
+    border-top-right-radius: var(--borderRadius);
+    border-bottom-right-radius: var(--borderRadius);
+    transition: all 250ms ease;
+}
+
+.divider {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    width: 32px;
+    height: 1px;
+    border-radius: var(--borderRadius);
+    background-color: var(--textColor);
+    opacity: 0.2;
+    margin: 0.5rem 0;
+    flex: 1 0 auto;
+    max-height: 1px;
+}
+
+@media only screen and (max-width: 530px) {
+    .sidebar {
+        transform: translateX(-72px);
+    }
+
+    .sidebar.active {
+        transform: unset;
+    }
+}

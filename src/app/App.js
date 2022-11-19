@@ -1,109 +1,124 @@
-import React, {useEffect, useState} from 'react';
-import { ColorRing } from 'react-loader-spinner';
-import { useDispatch, useSelector } from 'react-redux';
-import ContextMenu from '../features/contextMenu/ContextMenu';
-import { selectedEmote, selectedFavouriteEmote, selectedRepoContext } from '../features/contextMenu/contextMenuSlice';
+import React from 'react'
 
-import Emotes from '../features/emotes/Emotes';
-import Repos from '../features/repos/Repos';
-import { areObjectsEqual } from '../utils/objectsEqual';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchReposAsync, removeRepository } from './viewModel';
+
 import './App.css';
 
-function App() {
-  const allRepos = useSelector(state => state.repos.allRepos); 
+import Sidebar from '../sidebar/Sidebar';
+import Home from '../home/Home';
+
+import logo from '../assets/images/logo/firstLetter.png'
+import Repo from '../repo/Repo';
+import ContextMenu from '../contextMenu/ContextMenu';
+import useWindowDimensions from '../customHooks/WindowDimensions';
+
+const App = () => {
+  const { width } = useWindowDimensions();
+
+  const [homeActive, isHomeActive] = useState(true);
+  const [aboutActive, isAboutActive] = useState(false);
+  const [downloadActive, isDownloadActive] = useState(false);
+  const [openSidebar, setOpenSidebar] = useState(false);
+
+  const allRepos = useSelector((state) => state.viewModel.allRepos);
+  const selectedRepo = useSelector((state) => state.viewModel.selectedRepo);
+  const copied = useSelector((state) => state.viewModel.copied);
+
   const dispatch = useDispatch();
-  const [ openSidebar, setOpenSidebar ] = useState(false);
-  const [ homeActive, setHomeActive ] = useState(true);
-  const [ contextmenuActive, setContextMenuActive ] = useState(false);
-  const [ isLoading, setIsLoading ] = useState(true);
 
   useEffect(() => {
-    const contextMenuEventHandler = (e) => {
-        e.preventDefault();
-        if(e.target.className === 'emoteContainer' && e.target.parentNode.className.includes("emotesContainer")) {
-            const repo = allRepos.filter((rep) => rep.url === e.target.id)[0];
-            let emoteURL = e.target.lastChild.lastChild.src.split('/')
-            let emote = emoteURL[emoteURL.length - 1].split('.');
-            if(repo.favourites && repo.favourites.filter((fav) => areObjectsEqual(fav, {name: emote[0], type: emote[1]})).length > 0) {
-              dispatch(selectedFavouriteEmote({
-                active: true,
-                url: e.target.id,
-                path: allRepos.filter((rep) => rep.url === e.target.id)[0].data.path,
-                name: e.target.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
-                type: e.target.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
-              }));
-            } else {
-              dispatch(selectedEmote({
-                active: true, name: emote[0], type: emote[1]
-              }));
-            }
-        }
-
-        if(e.target.className.includes("repo")) {
-          const repo = allRepos.filter((rep) => rep.url === e.target.id)[0];
-          dispatch(selectedRepoContext({
-            active: true,
-            url: repo.url,
-            icon: repo.data.icon,
-            name: repo.data.name
-          }));
-        }
-
-        if(e.target.className.includes("favouriteEmotesEmoteContainer")) {
-          dispatch(selectedFavouriteEmote({
-            active: true,
-            url: e.target.id,
-            path: allRepos.filter((rep) => rep.url === e.target.id)[0].data.path,
-            name: e.target.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.src.split('/').length - 1].split('.')[0],
-            type: e.target.lastChild.lastChild.src.split('/')[e.target.lastChild.lastChild.src.split('/').length - 1].split('.')[1]
-          }));
-        }
-
-        setContextMenuActive(true);
-    };
-
-    document.addEventListener('contextmenu', contextMenuEventHandler);
-
-    return () => document.removeEventListener('contextmenu', contextMenuEventHandler)
-  }, [dispatch, allRepos]);
+    allRepos.forEach(repo => {
+        dispatch(fetchReposAsync(repo));
+    });
+  // eslint-disable-next-line
+  }, [dispatch]);
 
   return (
-      <div className='App' onClick={(e) => {
-        e.preventDefault()
-        if(openSidebar) {
-          setOpenSidebar(false);
-        }
-      }}>
-        {
-        
-        isLoading ?
-          <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)'
-          }}>
-            <ColorRing
-              visible={true}
-              height="80"
-              width="80"
-              ariaLabel="blocks-loading"
-              wrapperStyle={{}}
-              wrapperClass="blocks-wrapper"
-              colors={['#5865F2', '#5865F2', '#5865F2', '#5865F2', '#5865F2']}
-            /> 
-          </div>
-        : ""
-        }
+    <div className="App">
+      <div className={`copied${copied ? " active" : ""}`}>Copied</div>
+      <ContextMenu />
+      <Sidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+      <div className={`mainContent${openSidebar ? " sidebarOpen" : ""}`}>
+        <div className="container dark" style={{width: "90%"}}>
+            <div className="logoContainer">
+              {
+                width <= 560 
+                ?
+                  (<button className={`hamburgerMenu${openSidebar ? " active" : ""}`} onClick={(e) => {
+                    e.preventDefault();
+                    setOpenSidebar(!openSidebar);
+                  }}>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </button>)
+                :
+                  (<div className='empty'></div>)
+              }
+              <div className="logo">
+                <img src={logo} alt="N" /><span>ITROLESS</span>
+              </div>
+              <div className='empty'></div>
+            </div>
+            {
+              selectedRepo.active
+              ?
+              (
+                <div className="repoButtons">
+                  <button className="shareButton btn primary">Share</button>
+                  <button className="removeButton btn danger" onClick={(e) => {
+                    e.preventDefault();
+                    console.log("Clicked")
+                    dispatch(removeRepository({ url: selectedRepo.url }))
+                  }}>Remove Repo</button>
+                </div>
+              )
+              :
+              (
+                <div className="homeButtons" onClick={(e) => {
+                    e.preventDefault();
 
-        <Repos openSidebar={openSidebar} homeActive={homeActive} setHomeActive={setHomeActive} isLoading={isLoading} setIsLoading={setIsLoading} setContextMenuActive={setContextMenuActive} />
-        <div className={`mainContainer${openSidebar ? " openSidebar" : ""}`}>
-          <Emotes openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} setHomeActive={setHomeActive} setContextMenuActive={setContextMenuActive} isLoading={isLoading} />
-          <ContextMenu contextmenuActive={contextmenuActive} setContextMenuActive={setContextMenuActive} />
+                    console.log(e.target.className.includes("aboutButton"));
+
+                    if (e.target.className.includes("homeButton")) {
+                      isHomeActive(true);
+                      isAboutActive(false);
+                      isDownloadActive(false);
+                    }
+
+                    if (e.target.className.includes("aboutButton")) {
+                      isHomeActive(false);
+                      isAboutActive(true);
+                      isDownloadActive(false);
+                    }
+
+                    if (e.target.className.includes("downloadButton")) {
+                      isHomeActive(false);
+                      isAboutActive(false);
+                      isDownloadActive(true);
+                    }
+
+                }}>
+                    <button className={`homeButton btn primary${ homeActive ? " active" : "" }`}>Home</button>
+                    <button className={`aboutButton btn primary${ aboutActive ? " active" : "" }`}>About</button>
+                    <button className={`downloadButton btn primary${ downloadActive ? " active" : "" }`}>Downloads</button>
+                </div>
+              )
+            }
         </div>
-        
+        {
+          selectedRepo.active
+          ?
+          <Repo />
+          :
+          <Home homeActive={homeActive} aboutActive={aboutActive} downloadActive={downloadActive} />
+        }
       </div>
-  );
+    </div>
+  )
 }
 
-export default App;
+export default App
+
