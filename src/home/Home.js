@@ -252,10 +252,11 @@ const Home = ({homeActive, aboutActive, downloadActive}) => {
                             <i className="fa-solid fa-circle-info"></i>
                             <span>Downloads</span>
                         </div>
-                        <div className="content">
+                        <div className="content Downloads">
                             <p>Right click on the badges below for your preferred system and click open in new tab.</p>
                             <br />
                             <a href="https://testflight.apple.com/join/PeIAi5MM"><img src={AppStoreImg} alt="appstore" className='downloads' /></a>
+                            <a href='https://play.google.com/store/apps/details?id=com.paraskcd.nitroless&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' className='downloads playStore'/></a>
                             <a href="https://github.com/Nitroless/nitroless-electron/releases/"><img src={WindowsImg} alt="windows" className='downloads' /></a>
                         </div>
                     </div>

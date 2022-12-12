@@ -64,7 +64,18 @@
     cursor: pointer;
 }
 
+.content.Downloads {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 .downloads {
-    margin-left: 0.5rem;
-    width: 100px;
+    width: 150px;
+    padding: 10px;
+}
+
+.downloads.playStore {
+    width: 170px;
 }
