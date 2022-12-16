@@ -109,9 +109,13 @@ const viewModelSlice = createSlice({
 
         addRepository: (state, action) => {
             const { url } = action.payload;
+            var URL = url;
+            if (url[url.length - 1] !== "/") {
+                URL = url + "/"
+            }
             let repos = state.allRepos;
             repos.push({
-                url: url,
+                url: URL,
                 data: {}
             });
             state.repos = repos;
