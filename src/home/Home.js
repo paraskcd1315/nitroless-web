@@ -127,6 +127,10 @@ const Home = ({homeActive, aboutActive, downloadActive}) => {
                             </div>
                         </div>
                         <div className="container">
+                            <div className="title">
+                                <i className="fa-solid fa-link"></i>
+                                <span>Links</span>
+                            </div>
                             <div className="content socials">
                                 <div className="socialBrand github" onClick={(e) => window.open("https://github.com/Nitroless", '_blank').focus() }>
                                     <i className="fa-brands fa-github"></i>
@@ -139,6 +143,10 @@ const Home = ({homeActive, aboutActive, downloadActive}) => {
                                 <div className="socialBrand source" onClick={(e) => window.open("https://twitter.com/nitroless_", '_blank').focus() }>
                                     <i className="fa-brands fa-twitter"></i>
                                     Twitter
+                                </div>
+                                <div className="socialBrand source" onClick={(e) => window.open("https://discord.gg/y4GVrRTWPv", '_blank').focus() }>
+                                    <i className="fa-brands fa-discord"></i>
+                                    Discord
                                 </div>
                             </div>
                         </div>
