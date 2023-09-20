@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "./static/css/main.d5ca7a15.css",
+    "main.js": "./static/js/main.d3abd5a6.js",
+    "static/media/index.png": "./static/media/index.5d7e6402a48159a4cc4b.png",
+    "static/media/firstLetter.png": "./static/media/firstLetter.4572c884206eda762d14.png",
+    "static/media/Uni Sans Heavy Italic.otf": "./static/media/Uni Sans Heavy Italic.c0f5f33bc9f57d03fc92.otf",
+    "static/media/Uni Sans Thin.otf": "./static/media/Uni Sans Thin.946fca7c941bfb6639cc.otf",
+    "static/media/Uni Sans Heavy.otf": "./static/media/Uni Sans Heavy.de76b17291d74c0a03b0.otf",
+    "static/media/WindowsBadge.svg": "./static/media/WindowsBadge.a659a5e3e6a423847db5177e9c028a40.svg",
+    "static/media/MacStore.svg": "./static/media/MacStore.1d39e8dace6b366637c5a86a05efe854.svg",
+    "static/media/AppStore.svg": "./static/media/AppStore.8c4986ee4828b47d16f5cd694ef065f2.svg",
+    "index.html": "./index.html",
+    "main.d5ca7a15.css.map": "./static/css/main.d5ca7a15.css.map",
+    "main.d3abd5a6.js.map": "./static/js/main.d3abd5a6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d5ca7a15.css",
+    "static/js/main.d3abd5a6.js"
+  ]
+}
